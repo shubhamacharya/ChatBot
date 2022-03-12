@@ -8,7 +8,8 @@
         "How are you",
         "Is anyone there?",
         "Hello",
-        "Good day"
+        "Good day",
+        "what's up"
       ],
       "responses": [
         "Hey :-)",
@@ -52,7 +53,7 @@
       "What is the fee structure?",
       "Should we submit the entire fees at once or in installments?",
       "Will I get any confirmation on successful payment of the fee?"
-      ],
+            ],
       "responses":[
         "Fee Structure depends upon your Course",
         "There are both options available.But for the installments you have to write an application.",
