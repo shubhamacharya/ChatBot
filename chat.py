@@ -52,10 +52,10 @@ def get_response(msg):
         for intent in intents['intents']:
             if tag == intent["tag"]:
                 return random.choice(intent['responses'])
-    elif prob.item() >= 50:
+    elif prob.item() >= 0.60 and prob.item() < 0.70:
         for intent in intents['intents']:
                 if tag == intent["tag"]:
-                    do_you_mean = "Do you mean " + random.choice(intent['responses'])
+                    do_you_mean = "Do you mean " + random.choice(intent['patterns'])
                     return do_you_mean
     else:
         return "I am unable to understand...."
