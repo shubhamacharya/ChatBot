@@ -1,9 +1,12 @@
 import random
 import json
 import torch
+import subprocess
 
 from model import NeuralNet
-from nltk_utils import bag_of_words, tokenize
+from nltk_pkg import bag_of_words, tokenize
+
+all_words = []
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -11,20 +14,25 @@ with open('intents.json', 'r') as json_data:
     intents = json.load(json_data)
 
 FILE = "data.pth"
-data = torch.load(FILE)
 
-input_size = data["input_size"]
-hidden_size = data["hidden_size"]
-output_size = data["output_size"]
-all_words = data['all_words']
-tags = data['tags']
-model_state = data["model_state"]
+try: # To check for the availablity of training file
+    data = torch.load(FILE)
 
-model = NeuralNet(input_size, hidden_size, output_size).to(device)
-model.load_state_dict(model_state)
-model.eval()
+    input_size = data["input_size"]
+    hidden_size = data["hidden_size"]
+    output_size = data["output_size"]
+    all_words = data['all_words']
+    tags = data['tags']
+    model_state = data["model_state"]
 
-bot_name = "Sam"
+    model = NeuralNet(input_size, hidden_size, output_size).to(device)
+    model.load_state_dict(model_state)
+    model.eval()
+
+    bot_name = "ChatterBot"
+
+except FileNotFoundError: #If there is no training file then call the train.py script
+    subprocess.call("python3 ./train.py", shell=True)
 
 def get_response(msg):
     sentence = tokenize(msg)
@@ -43,22 +51,19 @@ def get_response(msg):
     if prob.item() >= 0.70:
         for intent in intents['intents']:
             if tag == intent["tag"]:
-                #return intent['responses']
                 return random.choice(intent['responses'])
-    # To implement Do you mean questions.
     elif prob.item() >= 50:
         for intent in intents['intents']:
                 if tag == intent["tag"]:
-                    #return intent['responses']
                     do_you_mean = "Do you mean " + random.choice(intent['responses'])
                     return do_you_mean
-                    #return "I do not understand..."
+    else:
+        return "I am unable to understand...."
 
 
 if __name__ == "__main__":
     print("Let's chat! (type 'quit' to exit)")
     while True:
-        # sentence = "do you use credit cards?"
         sentence = input("You: ")
         if sentence == "quit":
             break
