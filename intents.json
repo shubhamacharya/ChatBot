@@ -1,142 +1,488 @@
 {
   "intents": [
-    {
-      "tag": "greeting",
-      "patterns": [
-        "Hi",
-        "Hey",
-        "How are you",
-        "Is anyone there?",
-        "Hello",
-        "Good day"
-      ],
-      "responses": [
-        "Hey :-)",
-        "Hello",
-        "Hi there, what can I do for you?",
-        "Hi there, how can I help?"
-      ]
+      {
+          "tag": "greeting",
+          "patterns": [
+              "Hi",
+              "Hey",
+              "How are you",
+              "Is anyone there?",
+              "Hello",
+              "Good day"
+          ],
+          "responses": [
+              "Hey :-)",
+              "Hello",
+              "Hi there, what can I do for you?",
+              "Hi there, how can I help?"
+          ]
+      },
+      {
+          "tag": "goodbye",
+          "patterns": [
+              "Bye",
+              "See you later",
+              "Goodbye"
+          ],
+          "responses": [
+              "See you later, thanks for visiting",
+              "Have a nice day",
+              "Bye! Come back again soon."
+          ]
+      },
+      {
+          "tag": "thanks",
+          "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+          "responses": ["Happy to help!", "Any time!", "My pleasure"]
+      },
+      {
+          "tag": "payments",
+          "patterns": [
+              "Do you take credit cards?",
+              "Do you accept Mastercard?",
+              "Are you cash only?",
+              "What is the mode of payment?"
+          ],
+          "responses": [
+              "We accept Cards,UPI Pay,NEFT/RTGS",
+              "Prefered Methods are Cards or NEFT/RTGS.Cash payment are also accepted.",
+              "We accept most major credit cards, and Paypal"
+          ]
+      },
+      {
+        "tag": "age",
+        "patterns": [
+            "how old are you","when were you made","what is your age"
+        ],
+        "responses": [
+            "I was made in 2022, if that's what you are asking!"
+        ]
+      },
+      {
+        "tag": "appreciate",
+        "patterns": [
+            "You are awesome",
+            "you are the best",
+            "you are great",
+            "you are good"
+        ],
+        "responses": [
+            "Thank you!"
+        ]
+      },
+      {
+        "tag": "Identity",
+        "patterns": [
+            "Who are you",
+            "what are you",
+            "What is your name",
+            "name",
+            "your name",
+            "do you have a name",
+            "what are you called",
+            "what is your name",
+            "what should I call you",
+            "whats your name?",
+            "what are you",
+            "who are you",
+            "who is this",
+            "what am i chatting to",
+            "who am i taking to",
+            "what are you"
+        ],
+        "responses": [
+            "I am ChatterBot, a Deep-Learning chatbot",
+            "My name is Chatterbot"
+        ]
+      },
+      {
+        "tag": "hours",
+        "patterns": [
+                "timing of college",
+                "what is college timing",
+                "working days",
+                "when are you guys open",
+                "what are your hours",
+                "hours of operation",
+                "when is the college open",
+                "college timing",
+                "what about college timing",
+                "is college open on saturday",
+                "tell something about college timing",
+                "what is the college  hours",
+                "when should i come to college",
+                "when should i attend college",
+                "what is my college time",
+                "college timing",
+                "timing college"
+        ],
+        "responses": [
+                "College is open 9am-5pm Monday-Friday!"
+        ]
+      },
+      {
+        "tag": "fees",
+        "patterns": [
+            "What is the fee structure?",
+            "Should we submit the entire fees at once or in installments?",
+            "Will I get any confirmation on successful payment of the fee?",
+            "information about fee",
+            "information on fee",
+            "tell me the fee",
+            "college fee",
+            "fee per semester",
+            "what is the fee of each semester",
+            "what is the fees of each year",
+            "what is fee",
+            "what is the fees",
+            "how much is the fees",
+            "fees for first year",
+            "fees",
+            "about the fees",
+            "tell me something about the fees"
+        ],
+        "responses": [
+            "Fee Structure depends upon your Course",
+            "There are both options available.But for the installments you have to write an application.",
+            "You will get a payment slip after the successful fee payment"
+        ]
+      },
+      {
+        "tag": "location",
+        "patterns": [
+                "where is the college located",
+                "college is located at",
+                "where is college",
+                "where is college located",
+                "address of college",
+                "how to reach college",
+                "college location",
+                "college address",
+                "wheres the college",
+                "how can I reach college",
+                "whats is the college address",
+                "what is the address of college",
+                "address",
+                "location"
+        ],
+        "responses": [
+                "Fergusson College,FC Road,Ch. Shivaji Nagar,Pune  <a target=\"_blank\" href=\"https://www.fergusson.edu\"> here</a> "
+        ]
+      },
+      {
+        "tag": "hostel",
+        "patterns": [
+                "hostel facility",
+                "hostel servive",
+                "hostel location",
+                "hostel address",
+                "hostel facilities",
+                "hostel fees",
+                "Does college provide hostel",
+                "Is there any hostel",
+                "Where is hostel",
+                "do you have hostel",
+                "do you guys have hostel",
+                "hostel",
+                "hostel capacity",
+                "what is the hostel fee",
+                "how to get in hostel",
+                "what is the hostel address",
+                "how far is hostel from college",
+                "hostel college distance",
+                "where is the hostel",
+                "how big is the hostel",
+                "distance between college and hostel",
+                "distance between hostel and college"
+        ],
+        "responses": [
+                "Fergusson College provide's hostel facility"
+        ]
     },
     {
-      "tag": "goodbye",
-      "patterns": ["Bye", "See you later", "Goodbye"],
-      "responses": [
-        "See you later, thanks for visiting",
-        "Have a nice day",
-        "Bye! Come back again soon."
-      ]
+        "tag": "uniform",
+        "patterns": [
+            "college dress code",
+            "college dresscode",
+            "what is the uniform",
+            "can we wear casuals",
+            "Does college have an uniform",
+            "Is there any uniform",
+            "uniform",
+            "what about uniform",
+            "do we have to wear uniform"
+    ],
+        "responses": [
+            "Fergusson College does not have uniform"
+        ]
     },
     {
-      "tag": "thanks",
-      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
-      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+        "tag": "salutaion",
+        "patterns": [
+            "okk",
+            "okie",
+            "nice work",
+            "well done",
+            "good job",
+            "thanks for the help",
+            "Thank You",
+            "its ok",
+            "Thanks",
+            "k",
+            "ok",
+            "okay"
+        ],
+        "responses": [
+            "I am glad I helped you",
+            "welcome, anything else i can assist you with?"
+        ]
     },
     {
-      "tag": "payments",
-      "patterns": [
-        "Do you take credit cards?",
-        "Do you accept Mastercard?",
-        "Are you cash only?",
-        "What is the mode of payment?",
-        "How can I pay my application fee?"
-      ],
-      "responses": [
-        "We accept Cards,UPI Pay,NEFT/RTGS",
-        "Prefered Methods are Cards or NEFT/RTGS.Cash payment are also accepted.",
-        "We accept most major credit cards, and Paypal"
-      ]
+        "tag": "task",
+        "patterns": [
+            "what can you do",
+            "what are the thing you can do",
+            "things you can do",
+            "what can u do for me",
+            "how u can help me",
+            "why i should use you"
+        ],
+        "responses": [
+            "I can answer to low-intermediate questions regarding college",
+            "You can ask me questions regarding college, and i will try to answer them"
+        ]
     },
     {
-      "tag":"fees",
-      "patterns":[
-      "What is the fee structure?",
-      "Should we submit the entire fees at once or in installments?",
-      "Will I get any confirmation on successful payment of the fee?"
-      ],
-      "responses":[
-        "Fee Structure depends upon your Course",
-        "There are both options available.But for the installments you have to write an application.",
-        "You will get a payment slip after the successful fee payment"
-      ]
+        "tag":"ragging",
+        "patterns":[
+            "ragging",
+            "is ragging practice active in college",
+            "does college have any antiragging facility",
+            "is there any ragging cases",
+            "is ragging done here",
+            "ragging juniors",
+            "ragging history",
+            "ragging incidents"
+            
+        ],
+        "responses": [
+            "We are Proud to tell you that our college provides ragging free environment, and we have strict rules against ragging"
+        ]
+
     },
     {
-      "tag":"waiver",
-      "patterns":[
-      "Is it possible to get an educational loan for this Program?",
-      "Will I get a scholarship / loan for this programme?",
-      "How and when do I apply for financial aid?",
-      "Who processes my financial aid?",
-      "Can my application fee be waived?",
-      "I'm eligible for a fee waiver. How do I apply?",
-      "What are the documents needed to avail fee waiver?"
-      ],
-      "responses":[
-        "You can apply for educational loan.",
-        "There are various scholarships available from both the college and the Government",
-        "Visit the Finance Tab for more financial aid purpose",
-        "Your financial aid is processed by the college",
-        "If you belong to Reserved Caategory / PwD / EWS then Yes you are eligible.",
-        "Govenment Id,Cast certificate,Income Certificate"
-      ]
+        "tag":"hod",
+        "patterns":[
+            "hod",
+            "hod name",
+            "who is the hod"
+        ],
+        "responses":[
+            "HODs differ for each branch, please be more specific like: (HOD it)"
+        ]
+    },  
+    {
+        "tag":"transport",
+        "patterns":[
+            "dtc bus route",
+            "mode of transportation",
+            "how to get to college",
+            "buses for college",
+            "college buses",
+            "bus routes",
+            "list of buses for travelling",
+            "does 835 goes to college",
+            "does 835 goes to rawta mor"
+        ],
+        "responses":[
+            "There are plenty of buses available frequently"
+        ]
     },
     {
-      "tag":"admission",
-      "patterns":[
-        "Do I get placement opportunities after I complete the BSc Degree?",
-        "How and where can I apply for the program?",
-        "I had a gap of years.Would I be eligible to apply?",
-        "How and when do I register for courses?",
-        "How do I register for a required admissions test", 
-        "How will you get my scores?"
-      ],
-      "responses":[
-        "There are multiple opportunities for internship after the completion of BSc Degree",
-        "You can take online approach to apply for the program.Instructions given in Adminssion section.",
-        "You are eligible to apply for the course provided you can justify your gap."
-      ]
+        "tag": "metro",
+        "patterns":[
+            "nearest metro station",
+            "what is the nearest metro station",
+            "which metro station is near",
+            "closest metro station",
+            "which metro station is closest",
+            "nearby metro stations",
+            "metro",
+            "metro station nearby"
+        ],
+        "responses":[
+            "Shivajinagar metro station"
+        ]
     },
     {
-      "tag":"course",
-      "patterns":[
-        "How do I drop a course?",
-        "How much time do I need to spend on a course per day?",
-        "What are the different types of undergraduate degrees?",
-        "Is it possible to repeat a course for improving grades?",
-        "What will be the duration of this course?",
-        "Will the classes be taught live?",
-        "Will there be any interaction?"
-      ],
-      "responses":[
-        "Go in person to the registrar's office to get a class withdrawal sheet",
-        "You have to spend around 10 hours per day for course.",
-        "Computer Science,Electronics,Mathematics,Statistics,Physics,Chemistry,Biology",
-        "Yes,Most of the people does this to improve the grades",
-        "Classes will be live in campuse",
-        "There will be interactive sessions with teachers daily"
-      ]
+        "tag": "library",
+        "patterns": [
+            "is there any library",
+            "library facility",
+            "library facilities",
+            "do you have library",
+            "does the college have library facility",
+            "college library",
+            "where can i get books",
+            "book facility",
+            "Where is library",
+            "Library",
+            "Tell me about library",
+            "how many libraries"
+        ],
+        "responses": [
+            "There two libraries"
+        ]
     },
     {
-      "tag":"requirement",
-      "patterns":[
-        "I do not have any knowledge of coding.",
-        "Does this course cover the basics of coding before progressing to advanced levels?",
-        "What are the prerequisites of this course?"
-      ],
-      "responses":[
-        "No,there is no such requirement for this course.But having basic knowledge about course is preffered"
-      ]
+        "tag": "infrastructure",
+        "patterns": [
+            "how is college infrastructure",
+            "infrastructure",
+            "college infrastructure"
+        ],
+        "responses": [
+            "Fergusson College has Excellent Infrastructure. Campus is clean. Good IT Labs With Good Speed of Internet connection"
+        ]
     },
     {
-      "tag": "funny",
-      "patterns": [
-        "Tell me a joke!",
-        "Tell me something funny!",
-        "Do you know a joke?"
-      ],
-      "responses": [
-        "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
-        "What did the buffalo say when his son left for college? Bison."
-      ]
-    }
-  ]
+        "tag": "canteen",
+        "patterns": [
+            "food facilities",
+            "canteen facilities",
+            "canteen facility",
+            "is there any canteen",
+            "Is there a cafetaria in college",
+            "Does college have canteen",
+            "Where is canteen",
+            "where is cafetaria",
+            "canteen",
+            "Cafetaria"
+        ],
+        "responses": [
+            "Fergusson College has 3 canteen's with variety of food available"
+        ]
+    },
+    {
+        "tag": "waiver",
+        "patterns": [
+              "Can my application fee be waived?",
+              "I'm eligible for a fee waiver. How do I apply?",
+              "What are the documents needed to avail fee waiver?"
+        ],
+        "responses": [
+              "No, there is no wavier for the application fees",
+              "If you belong to Reserved Caategory / PwD / EWS then Yes you are eligible.",
+              "Govenment Id,Cast certificate,Income Certificate"
+        ]
+      },
+      {
+        "tag": "loan",
+        "patterns": [
+              "Is it possible to get an educational loan for this Program?",
+              "Will I get a loan for this programme?",
+              "How and when do I apply for financial aid?",
+              "Who processes my financial aid?"
+        ],
+        "responses": [
+              "You can apply for educational loan.",
+              "There are various scholarships available from both the college and the Government",
+              "Visit the Finance Tab for more financial aid purpose",
+              "Your financial aid is processed by the college"
+        ]
+      },
+      {
+        "tag": "admission",
+        "patterns": [
+              "Do I get placement opportunities after I complete the BSc Degree?",
+              "How and where can I apply for the program?",
+              "I had a gap of years. Would I be eligible to apply?",
+              "How and when do I register for courses?",
+              "How do I register for a required admissions test"
+        ],
+        "responses": [
+              "There are multiple opportunities for internship after the completion of BSc Degree",
+              "You can take online approach to apply for the program.Instructions given in Adminssion section.",
+              "You are eligible to apply for the course provided you can justify your gap."
+        ]
+      },
+      {
+        "tag": "grades",
+        "patterns": ["Is it possible to repeat a course for improving grades?", "How will you get my scores?"],
+        "responses": ["Yes,Most of the people does this to improve the grades", "You will get mail from college."]
+      },
+      {
+        "tag": "course",
+        "patterns": [
+            "How do I drop a course?",
+            "How much time do I need to spend on a course per day?",
+            "What are the different types of undergraduate degrees?",
+            "What will be the duration of this course?",
+            "Will the classes be taught live?",
+            "Will there be any interaction?"
+        ],
+          "responses": [
+              "Go in person to the registrar's office to get a class withdrawal sheet",
+              "You have to spend around 10 hours per day for course.",
+              "Computer Science,Electronics,Mathematics,Statistics,Physics,Chemistry,Biology",
+              "Classes will be live in campuse",
+              "There will be interactive sessions with teachers daily"
+          ]
+      },
+      {
+        "tag": "requirement",
+        "patterns": [
+            "I do not have any knowledge of coding.",
+            "What are the prerequisites of this course?"
+        ],
+        "responses": [
+            "No,there is no such requirement for this course.But having basic knowledge about course is preffered"
+        ]
+      },
+      {
+        "tag": "session_commencement",
+        "patterns": [
+            "When will the new term start?",
+            "When will the new session start?",
+            "What is the commencement date for the new session",
+            "When will the lectures start?", 
+            "When will the academic term start?",
+            "When will the classes begin?", 
+            "When will the classes of newcomers start?",
+            "From when do the new students have to come?"
+        ],
+        "responses": [
+            "Exact date has not been decided yet, but the new academic term will start in July."
+        ]
+      },
+      {
+        "tag": "placement",
+        "patterns": ["Which companies come for placement?",
+            "I would like to inquire about the placement",
+            "I would like to inquire about the campus placement",
+            "What are the opportunities for the placement?",
+            "What are the placement packages?",
+            "How are the placement offered to the student?"
+        ],
+        "responses": ["Placement opportunities for the students are excellent!. We have our own dedicated placement cell which helps and trains the students for the interview. Many well-known companies come for the campus placement as recruiters. You may find more infromation about our placement in our webpage. Here is the link!"]
+      },
+      {
+        "tag": "cutoff",
+        "patterns": ["what is the cutoff for the admission?"
+        ],
+        "responses": ["We are not sure as each year the criterias are different. Please refer to the previous cutoffs to get an idea."]
+      },
+      {
+        "tag": "funny",
+        "patterns": [
+            "Tell me a joke!",
+            "Tell me something funny!",
+            "Do you know a joke?"
+        ],
+        "responses": [
+            "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
+            "What did the buffalo say when his son left for college? Bison."
+        ]
+      }
+   ]
 }
