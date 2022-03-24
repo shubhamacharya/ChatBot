@@ -48,11 +48,11 @@ def get_response(msg):
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
 
-    if prob.item() >= 0.70:
+    if prob.item() >= 0.80:
         for intent in intents['intents']:
             if tag == intent["tag"]:
                 return random.choice(intent['responses'])
-    elif prob.item() >= 0.60 and prob.item() < 0.70:
+    elif prob.item() >= 0.75 and prob.item() < 0.80:
         for intent in intents['intents']:
                 if tag == intent["tag"]:
                     do_you_mean = "Do you mean " + random.choice(intent['patterns'])
