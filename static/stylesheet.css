@@ -185,3 +185,8 @@ body {
         border-radius: 0px;
     }
 }
+
+/* Admin Page */
+.d-flex{
+    height: 50%;
+}
