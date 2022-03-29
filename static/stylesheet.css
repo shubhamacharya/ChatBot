@@ -187,6 +187,40 @@ body {
 }
 
 /* Admin Page */
-.d-flex{
-    height: 50%;
+.split-left{
+    float:left;
+    width: 10%;
 }
+
+.split-right{
+    float: left;
+    width: 80%;
+    margin-left: 10px;
+}
+
+.d-flex{
+    margin-top: 50px;
+}
+
+.nav-link{
+    margin-bottom: 20px;
+}
+
+/* Dropdown menu will open on hoverover */
+.dropdown:hover .dropdown-menu{
+    display: block;
+}
+
+/* Changes the color of the dropdown buttton on hover */
+.dropdown:hover .dropdown-toggle{
+    background-color: #969090;
+}
+
+.dropdown{
+    margin-top: 15px;
+    padding: 8px;
+}
+
+/*.card-body{
+    background-color: cyan;
+}*/
