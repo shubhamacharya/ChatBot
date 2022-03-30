@@ -43,42 +43,6 @@
                 "Any time!",
                 "My pleasure"
             ]
-        },
-        {
-            "tag": "test",
-            "pattern": [
-                "This is my question."
-            ],
-            "response": [
-                "This is answer"
-            ]
-        },
-        {
-            "tag": "test",
-            "pattern": [
-                "This is my question."
-            ],
-            "response": [
-                "This is answer"
-            ]
-        },
-        {
-            "tag": "test",
-            "pattern": [
-                "This is my question."
-            ],
-            "response": [
-                "This is answer"
-            ]
-        },
-        {
-            "tag": "test",
-            "pattern": [
-                "This is my question."
-            ],
-            "response": [
-                "This is answer"
-            ]
         }
     ]
 }
