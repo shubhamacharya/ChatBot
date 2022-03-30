@@ -21,21 +21,20 @@ def predict():
 
 @app.route("/admin",methods=['GET'])
 def admin_get():
-    return render_template("admin.html")
+    tags = getTagList()
+    return render_template("admin.html",tags=tags)
 
 @app.route("/addQuestion",methods=['POST'])
 def addQuestion_post():
-    questions = request.form["questions"]
+    questions = request.form["questions"].split('\n')
     answer = request.form["answer"]
     tag = request.form["tags"]
     
-    questions = questions.split('\n')
     '''pattern = ["This is my question."]
     responses = ["This is answer"]
     tag = "test"
     '''
-    print(questions)
-
+    
     #addQuestion(pattern,responses,tag)
     #print(questions+"\t"+answer+"\t"+tag)
     return redirect(url_for('admin_get'))
