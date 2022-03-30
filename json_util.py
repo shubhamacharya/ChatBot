@@ -18,4 +18,13 @@ pattern = ["This is my question."]
 responses = ["This is answer"]
 tag = "test"
 
-addQuestion(pattern,responses,tag)
+def getTagList():
+    file = open("./test.json","r")
+    data = json.load(file)
+    tags = []
+    for intent in data['intents']:
+        tags.append(intent['tag'])
+    return tags
+
+#addQuestion(pattern,responses,tag)
+#getTagList()
