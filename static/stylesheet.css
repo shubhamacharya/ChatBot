@@ -221,6 +221,6 @@ body {
     padding: 8px;
 }
 
-/*.card-body{
-    background-color: cyan;
-}*/
+#addNewTag{
+    padding-top: 20px;
+}
