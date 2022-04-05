@@ -14,10 +14,6 @@ def addQuestion(pattern,response,tag):
         file.seek(0)
         json.dump(data,file,indent=4)
 
-pattern = ["This is my question."]
-responses = ["This is answer"]
-tag = "test"
-
 def getTagList():
     file = open("./test.json","r")
     data = json.load(file)
@@ -25,6 +21,3 @@ def getTagList():
     for intent in data['intents']:
         tags.append(intent['tag'])
     return tags
-
-#addQuestion(pattern,responses,tag)
-#getTagList()
