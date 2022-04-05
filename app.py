@@ -2,10 +2,13 @@ from urllib import response
 from flask import Flask, redirect,render_template,request,jsonify, url_for
 from flask_cors import CORS
 from chat import get_response
+import re
 from json_util import *
 
 app = Flask(__name__)
 CORS(app)
+
+unanswered_question = []
 
 @app.route("/",methods=['GET','POST'])
 def index_get():
@@ -15,28 +18,29 @@ def index_get():
 def predict():
     text = request.get_json().get("message")
     # TODO : check text validity
-    response = get_response(text)
+    global unanswered_question
+    response,text = get_response(text)
+    unanswered_question.append(text)
+    
     message = {"answer":response}
     return jsonify(message)
 
 @app.route("/admin",methods=['GET'])
 def admin_get():
     tags = getTagList()
-    return render_template("admin.html",tags=tags)
+    return render_template("admin.html",tags=tags,unanswered=unanswered_question)
 
 @app.route("/addQuestion",methods=['POST'])
 def addQuestion_post():
-    questions = request.form["questions"].split('\n')
-    answer = request.form["answer"]
-    tag = request.form["tags"]
-    
-    '''pattern = ["This is my question."]
-    responses = ["This is answer"]
-    tag = "test"
-    '''
-    
-    #addQuestion(pattern,responses,tag)
-    #print(questions+"\t"+answer+"\t"+tag)
+    unformattedPatterns = request.form["questions"].split('\n')
+    pattern = list(map(lambda x : re.sub("\r","",x),unformattedPatterns))
+
+    unformattedResponses = request.form["answer"].split('\n')
+    responses = list(map(lambda x : re.sub("\r","",x),unformattedResponses))
+
+    tag = request.form["newTag"]
+
+    addQuestion(pattern,responses,tag)
     return redirect(url_for('admin_get'))
 
 
