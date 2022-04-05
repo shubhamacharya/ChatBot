@@ -35,6 +35,8 @@ except FileNotFoundError: #If there is no training file then call the train.py s
     subprocess.call("python3 ./train.py", shell=True)
 
 def get_response(msg):
+    unanswed_question = " "
+
     sentence = tokenize(msg)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])
@@ -51,14 +53,18 @@ def get_response(msg):
     if prob.item() >= 0.80:
         for intent in intents['intents']:
             if tag == intent["tag"]:
-                return random.choice(intent['responses'])
+                return [random.choice(intent['responses']),[]]
+        """ 
     elif prob.item() >= 0.75 and prob.item() < 0.80:
         for intent in intents['intents']:
                 if tag == intent["tag"]:
                     do_you_mean = "Do you mean " + random.choice(intent['patterns'])
-                    return do_you_mean
+                    return do_you_mean 
+    """
     else:
-        return "I am unable to understand...."
+        unanswed_question = msg
+        unable = "I am unable to understand...."
+        return [unable,unanswed_question]
 
 
 if __name__ == "__main__":
