@@ -30,7 +30,8 @@ def predict():
 def admin_get():
     tags = getTagList()
     unanswered_question = getUnanswered()
-    return render_template("admin.html",tags=tags,unanswered=unanswered_question)
+    count = len(unanswered_question)
+    return render_template("admin.html",tags=tags,unanswered=unanswered_question,count=count)
 
 @app.route("/addQuestion",methods=['POST'])
 def addQuestion_post():
