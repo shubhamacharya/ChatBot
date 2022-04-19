@@ -1,6 +1,5 @@
 {
-    "intents": [
-        {
+    "intents": [{
             "tag": "greeting",
             "patterns": [
                 "Hi",
@@ -42,17 +41,6 @@
                 "Happy to help!",
                 "Any time!",
                 "My pleasure"
-            ]
-        },
-        {
-            "tag": "testing",
-            "pattern": [
-                "this is question 4",
-                "this is question 5",
-                "this is question 6"
-            ],
-            "response": [
-                "this is common2"
             ]
         }
     ]
