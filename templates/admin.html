@@ -15,12 +15,37 @@
   <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!--Admin Navbar-->
+    <nav class="navbar navbar-expand-sm py-0 navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/admin">ChatterBot</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Options
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><from method="POST" class="dropdown-item" action="/register"><button class="hidden-btn" type="submit">Add Admin</button></form></li>
+                <li><form method="POST" class="dropdown-item" action="/logout"><button class="hidden-btn" type="submit">Logout</button></form></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--Admin Navbar End-->
 
     <div class="d-flex align-items-start">
       <div class="split-left nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</button>
         <button class="nav-link" id="v-pills-add-question-tab" data-bs-toggle="pill" data-bs-target="#v-pills-add-question" type="button" role="tab" aria-controls="v-pills-add-question" aria-selected="false">Add Question</button>
         <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Answer Questions</button>
+        <button class="nav-link" id="v-pills-edit-tab" data-bs-toggle="pill" data-bs-target="#v-pills-edit" type="button" role="tab" aria-controls="v-pills-edit" aria-selected="false">Edit Question</button>
       </div>
 
       <div class="tab-content split-right" id="v-pills-tabContent">
@@ -81,42 +106,85 @@
         <!-- Answer Questions -->
         <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
           {% if unanswered%}
-            <div class="accordion" id="accordionExample">
-              {% for question in unanswered %}
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{question}}" aria-expanded="true" aria-controls="collapseOne">
-                      {{ question }}
-                    </button>
-                  </h2>
-                  <div class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      <form action=" " method="post">
-                        <div class="mb-3">
-                          <label for="addAnswer" class="form-label">Enter Answer Here</label>
-                          <input class="form-control" id="addAnswer" type="text" name="addAnswer">
-                        </div>
-                      
-                        <select class="form-select" name="addAnswertags" id="addAnswertags" aria-label="Default select example">
-                          <option selected disabled>Select Tag</option>
-                          {% for tag in tags %}
-                            <option value= {{ tag }}>{{ tag }}</option>
-                          {% endfor %}
-                          <option value="nota">Not Present</option>
-                        </select>
-                    
-                        <div class="text-center">
-                          <button class="btn btn-primary btn-lg" type="submit" name="submit" value="submit">Submit</button>
-                        </div>
-                      </form>
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+            {% for i in range(count) %}
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-heading{{i}}">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
+                    {{unanswered[i]}}
+                  </button>
+                </h2>
+                <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
+                  <form action="/unanswered" method="post">
+                    <div class="mb-3">
+                      <input name="question" value="{{unanswered[i]}}" readonly></input><br><br>
+                      <label for="addAnswer" class="form-label">Enter Answer Here</label>
+                      <input class="form-control" id="addAnswer" type="text" name="addAnswer">
                     </div>
-                  </div>
+                  
+                    <select class="form-select" name="addAnsTags" id="addAnsTags" aria-label="Default select example">
+                      <option selected disabled>Select Tag</option>
+                      {% for tag in tags %}
+                        <option value= {{ tag }}>{{ tag }}</option>
+                      {% endfor %}
+                      <option value="nota">Not Present</option>
+                    </select>
+  
+                    <div id="addAnsNewTag" style="display: none">
+                      Add New Tag:
+                      <input class="form-control" name="addAnstags" id="addAnstags" type="text" placeholder="Enter New Tag Here.">
+                    </div>
+  
+                    <script type="text/javascript">
+                        //Shows the Add New Tag if Not Present Option is Selected.
+                        $("#addAnsTags").on('change',function () {
+                          if(this.value == 'nota')
+                          {
+                            $('#addAnsNewTag').show();
+                          }
+                          else
+                          {
+                            $('#addAnsNewTag').hide();
+                          }
+                        });
+                      </script>
+
+                    <div class="text-center">
+                      <button class="btn btn-primary btn-lg" type="submit" name="submit" value="submit">Submit</button>
+                    </div>
+                  </form>                
                 </div>
-              {% endfor %}
-            </div>
+              </div>
+            {% endfor %}
+          </div>
           {% else %}
             <h3>No Questions to answer</h3>
           {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="v-pills-edit" role="tabpanel" aria-labelledby="v-pills-edit-tab">
+          <form name="addQuestion" action="/addQuestion" method="post">
+            <div class="card">
+              <div class="card-body">
+                  <form class="form-inline">
+                    <select name="searchTag" class="box mdb-select md-form">
+                      <option value="" disabled selected>Select Tag</option>
+                      {% for tag in tags%}
+                        <option value="{{tag}}">{{tag}}</option>
+                      {% endfor %}
+                    </select>
+                    <input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn search-btn btn-outline-success" type="submit">Search</button>
+                  </form>
+                  <script type="text/javascript">
+                    //Shows the Add New Tag if Not Present Option is Selected.
+                    $("#searchTag").on('change',function () {
+                      
+                    });
+                  </script>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>  
