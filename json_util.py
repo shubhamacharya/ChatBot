@@ -1,29 +1,59 @@
 import json
+import re
 from os import path,stat
+from werkzeug.security import generate_password_hash
 
-def addQuestion(pattern,response,tag):
+ 
+def formatList(unformattedList):
+    tempList = unformattedList.split('\n')
+    return list(map(lambda x : re.sub("\r","",x),tempList))
+
+def addQuestion(pattern,response,tag,switch=False):
     file = open("./test.json","r+")
     data = json.load(file)
-    
-    flag = False
-    tags = getTagList()
 
+    questionFlag = False
+    tagFlag = False
+
+    tags = getTagList()
+    index = -1
     try:
         index = tags.index(tag)
     except ValueError:
-        flag = True
+        tagFlag = False
 
-    if flag: #If tag not present in json file create new object
-        entry = {"tag":tag,"pattern":pattern,"response":response}
-        data['intents'].append(entry)
+    if index != -1:
+        tagFlag == True 
+    
+
+    if switch:
+        for i in range(len(data['intents'])):
+            if pattern in data['intents'][i]['patterns']:
+                questionFlag = True
+                
+    pattern = pattern.split('\n')
+    response = response.split('\n')
+
+    if tagFlag: #If tag not present in json file create new object
+        if questionFlag:
+            pass
+        else:
+            data['intents'][index]['patterns'].extend(pattern)
+        data['intents'][index]['responses'].extend(response)    
     else: #Else append to the tag
-        data['intents'][index]['pattern'].extend(pattern)
-        data['intents'][index]['response'].extend(response)
+        entry = {"tag":tag,"patterns":pattern,"responses":response}
+        data['intents'].append(entry)
+        
     
-    file.seek(0)
-    json.dump(data,file,indent=4)
-    
-    file.close()
+    try:
+        file.seek(0)
+        json.dump(data,file,indent=4)
+        op=True
+    except:
+         op=False
+    finally:
+        file.close()
+        return op
 
 def getTagList():
     file = open("./test.json","r")
@@ -66,11 +96,25 @@ def unansweredWriteJSON(unanswered):
         json.dump(data,file,indent=4)
         file.close()
 
-#unanswered = ['this is question 1','this is question 2','this is question 3']
-#unansweredQuestions(unanswered)
-
-pattern = ['this is question 4','this is question 5','this is question 6']
-response = ['this is common4']
-tag = 'testing'
-#unansweredWriteJSON(pattern)
-getUnanswered()
+def check_auth(email="",password="",add=False):
+    '''
+    Creates the default admin user if file does not exists.
+    '''
+    if not add:
+        if not path.exists('./auth.json') or stat('./auth.json').st_size==0:
+            try:
+                file = open("./auth.json","w+")
+                password = generate_password_hash('admin123','sha256')
+                json.dump({"auth":[{'email':'admin@gmail.com','password':password,'status':"active"}]},file)
+            except:
+                print("Error")
+            finally:
+                print("Check Auth Successfull")
+                file.close()
+        else:
+            return True
+    else:
+        file = open("./auth.json","r+")
+        data = json.load(file)
+        password = generate_password_hash(password,'sha256')
+        data['auth'].append({'email':email,'password':password,'status':"active"})
