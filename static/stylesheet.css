@@ -17,7 +17,7 @@ body {
 
 .collapsible {
     /*background-color: rgb(82, 151, 255);*/
-    background-image: linear-gradient(to bottom right,rgb(16, 38, 99),rgb(48, 138, 240));
+    background-image: linear-gradient(to bottom right, rgb(16, 38, 99), rgb(48, 138, 240));
     color: white;
     cursor: pointer;
     padding: 18px;
@@ -75,7 +75,7 @@ body {
     width: 100%;
     align-items: center;
     /*background-color: rgb(235, 235, 235);*/
-    background-image: linear-gradient(to bottom right,rgb(16, 38, 99),rgb(48, 138, 240));
+    background-image: linear-gradient(to bottom right, rgb(16, 38, 99), rgb(48, 138, 240));
     border-radius: 10px 10px 0px 0px;
     padding: 10px 0px 10px 10px;
 }
@@ -92,6 +92,7 @@ body {
 #chat-icon:hover {
     opacity: .7;
 }
+
 
 /* Chat bubbles */
 
@@ -114,7 +115,7 @@ body {
 
 .userText {
     /* color: white; */
-    color:black;
+    color: black;
     font-family: Helvetica;
     font-size: 16px;
     font-weight: normal;
@@ -186,41 +187,108 @@ body {
     }
 }
 
+
 /* Admin Page */
-.split-left{
-    float:left;
+
+.split-left {
+    float: left;
     width: 10%;
 }
 
-.split-right{
+.split-right {
     float: left;
     width: 80%;
     margin-left: 10px;
 }
 
-.d-flex{
-    margin-top: 50px;
+.d-flex {
+    margin-top: 20px;
 }
 
-.nav-link{
+.nav-link {
     margin-bottom: 20px;
 }
 
+.box {
+    width: 120px;
+    height: 30px;
+    border: 1px solid #999;
+    font-size: 18px;
+    color: #1c87c9;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 4px 4px #ccc;
+}
+
+.navbar {
+    padding-top: 0.25rem;
+    /* 0px does not look good on small screens */
+    padding-bottom: 0.25rem;
+    font-size: smaller;
+    /* Just because I am using big size font */
+    line-height: 1em;
+}
+
+#navbarNavDropdown {
+    margin-left: 82.5%;
+}
+
+.search-bar {
+    margin-right: 20%;
+}
+
+.search-btn {
+    margin-top: 2%;
+    margin-left: 43%
+}
+
+.search-bar {
+    margin-top: 2%;
+}
+
+.hidden-btn {
+    background: transparent;
+    border: none !important;
+}
+
+.register-card {
+    margin-top: 10%;
+    margin-left: 10%;
+    float: right;
+    margin-right: 50%;
+    margin-bottom: 10%;
+}
+
+.register-btn {
+    float: center
+}
+
+
 /* Dropdown menu will open on hoverover */
-.dropdown:hover .dropdown-menu{
+
+.dropdown:hover .dropdown-menu {
     display: block;
 }
 
+
 /* Changes the color of the dropdown buttton on hover */
-.dropdown:hover .dropdown-toggle{
+
+.dropdown:hover .dropdown-toggle {
     background-color: #969090;
 }
 
-.dropdown{
+.dropdown {
     margin-top: 15px;
     padding: 8px;
 }
 
-#addNewTag{
+#addNewTag {
     padding-top: 20px;
+}
+
+
+/* Login Page*/
+
+.sign_header {
+    color: blue;
 }
