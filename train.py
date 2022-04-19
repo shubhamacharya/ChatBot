@@ -5,7 +5,6 @@ import json
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-
 from nltk_pkg import bag_of_words, tokenize, stem
 from model import NeuralNet
 
@@ -15,6 +14,7 @@ with open('intents.json', 'r') as f:
 all_words = []
 tags = []
 xy = []
+
 # loop through each sentence in our intents patterns
 for intent in intents['intents']:
     tag = intent['tag']
