@@ -50,17 +50,19 @@ for (pattern_sentence, tag) in xy:
     label = tags.index(tag)
     y_train.append(label)
 
+
 X_train = np.array(X_train)
 y_train = np.array(y_train)
 
+
 # Hyper-parameters 
-num_epochs = 10000
-batch_size = 8
+num_epochs = 1000
+batch_size = 10
 learning_rate = 0.001
 input_size = len(X_train[0])
 hidden_size = 8
 output_size = len(tags)
-print(input_size, output_size)
+
 
 class ChatDataset(Dataset):
 
@@ -100,7 +102,7 @@ for epoch in range(num_epochs):
         # Forward pass
         outputs = model(words)
         # if y would be one-hot, we must apply
-        # labels = torch.max(labels, 1)[1]
+        #labels = torch.max(labels, 1)[1]
         loss = criterion(outputs, labels)
         
         # Backward and optimize

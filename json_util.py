@@ -3,7 +3,7 @@ import re
 from os import path,stat
 from werkzeug.security import generate_password_hash
 
- 
+
 def formatList(unformattedList):
     tempList = unformattedList.split('\n')
     return list(map(lambda x : re.sub("\r","",x),tempList))
@@ -31,20 +31,20 @@ def addQuestion(pattern,response,tag,switch=False):
             if pattern in data['intents'][i]['patterns']:
                 questionFlag = True
                 
-    pattern = pattern.split('\n')
-    response = response.split('\n')
+        pattern = formatList(pattern)
+        response = formatList(response)
+    print(data['intents'][index])
 
-    if tagFlag: #If tag not present in json file create new object
+    if tagFlag: # Append to the tag if tag is present 
         if questionFlag:
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
-        data['intents'][index]['responses'].extend(response)    
-    else: #Else append to the tag
+            data['intents'][index]['responses'].extend(response)    
+    else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
-        
-    
+         
     try:
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -64,15 +64,33 @@ def getTagList():
     file.close()
     return tags
 
+def getTagQuestion(tag):
+    try:
+        file = open("./test.json","r")
+        data = json.load(file)
+        question = {}
+        for intent in data['intents']:
+            if intent['tag'] == tag:
+                question = dict(intent)
+    except:
+        print("Error")
+    finally:
+        file.close()
+        return question
+
 def getUnanswered():
     unansweredList = []
     if path.exists("./unanswered.json"):
-        file = open("./unanswered.json","r")
-        data = json.load(file)
-        for ques in data['question']:
-            unansweredList.extend(ques.keys())
-    file.close()
-    return unansweredList
+        try:
+            file = open("./unanswered.json","r+")
+            data = json.load(file)
+            for ques in data['question']:
+                unansweredList.extend(ques.keys())
+        except:
+            pass
+        finally:
+            file.close()
+            return unansweredList
 
 def unansweredWriteJSON(unanswered):
     '''
@@ -118,3 +136,9 @@ def check_auth(email="",password="",add=False):
         data = json.load(file)
         password = generate_password_hash(password,'sha256')
         data['auth'].append({'email':email,'password':password,'status':"active"})
+
+'''question = "this is question 1"
+ans = "this is ans 1"
+tag = "test"
+addQuestion(question,ans,tag,switch=True)
+'''

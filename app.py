@@ -1,7 +1,5 @@
-from crypt import methods
 from flask import Flask,session,redirect,render_template,request,jsonify, url_for,flash
 from flask_cors import CORS
-from pandas import NA
 from chat import get_response
 from werkzeug.security import generate_password_hash,check_password_hash
 from json_util import *
@@ -31,7 +29,6 @@ def register():
 
             check_auth(email,password,add=True)
             return redirect(url_for("admin"))
-
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -96,7 +93,7 @@ def addQuestion_post():
     unformattedPatterns = request.form["questions"]
     pattern = formatList(unformattedPatterns)
 
-    unformattedResponses = request.form["answer"].split('\n')
+    unformattedResponses = request.form["answer"]
     responses = formatList(unformattedResponses)
 
     tag = request.form["newTag"]
@@ -106,16 +103,41 @@ def addQuestion_post():
 
 @app.route("/unanswered",methods=['POST'])
 def unanswered_post():
+    user = session['user']
     question = request.form["question"]
     unformattedResponse = request.form["addAnswer"]
     tags = request.form["addAnstags"]
 
     if addQuestion(question,unformattedResponse,tags,switch=True):
-        #Remove the answered question from the unanswered.json file
-        flash("Question added Successfully...")
+        try:
+            file = open("./unanswered.json","r+")
+            data = json.load(file)
+
+            for i in range(len(data['question'])):
+                if question in data['question'][i]:
+                    data['question'][i].pop(question) 
+            
+            file = open("./unanswered.json","w+")
+            file.seek(0)
+            json.dump(data,file)
+            
+            flash("Question added Successfully...")
+            session['user'] = user
+        except:
+            pass
+        finally:
+            file.close()
     else:
         flash("Question not added.")
+
     return redirect(url_for('admin_get'))
 
+@app.route("/api/tag",methods=['GET'])
+def fetchTag():
+    args = request.args
+    args = args.to_dict()
+    return getTagQuestion(args.get("tag"))
+     
+     
 if __name__ == "__main__":
     app.run(debug=True)

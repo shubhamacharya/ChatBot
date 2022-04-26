@@ -42,6 +42,15 @@
                 "Any time!",
                 "My pleasure"
             ]
+        },
+        {
+            "tag": "test",
+            "patterns": [
+                "this is question 1"
+            ],
+            "responses": [
+                "this is answer 1"
+            ]
         }
     ]
 }
