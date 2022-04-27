@@ -46,7 +46,8 @@
         {
             "tag": "test",
             "patterns": [
-                "this is question 1"
+                "this is question 1",
+                "this is question 2"
             ],
             "responses": [
                 "this is answer 1"
