@@ -21,27 +21,28 @@ def addQuestion(pattern,response,tag,switch=False):
         tagFlag = False
 
     if index != -1:
-        tagFlag == True 
-    
+        tagFlag = True
+         
+    #print("Index : ",index,"Tag Flag : ",tagFlag)
     if switch:
         for i in range(len(data['intents'])):
             if pattern in data['intents'][i]['patterns']:
                 questionFlag = True
                 
-        pattern = formatList(pattern)
-        response = formatList(response)
-    print(data['intents'][index])
+    pattern = formatList(pattern)
+    response = formatList(response)
 
     if tagFlag: # Append to the tag if tag is present 
         if questionFlag:
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
-            data['intents'][index]['responses'].extend(response)    
+            data['intents'][index]['responses'].extend(response)   
+            print(data,"\n\n") 
     else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
-         
+        print(data)
     try:
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -173,7 +174,3 @@ def check_auth(email="",password="",role="",add=False):
             print("Error while adding new admin.",e)
         finally:
             file.close()
-
-#questions = ["this is question 1","this is question 2","this is question 3","this is question 4"]
-#getUnanswered('Admin')
-#unansweredWriteJSON(questions)
