@@ -17,18 +17,21 @@ def index_get():
 
 @app.route("/register",methods=['GET','POST'])
 def register():
+    user = session['user']
     if request.method == 'GET':
-        if 'user' in session:  
+        if user and user["role"] == "superAdmin":  
             return render_template("register.html")
         else:
             return redirect(url_for("login"))
     else:
-        if 'user' in session:
+        if user and user["role"] == "superAdmin":
             email = request.form['email']
             password = request.form['password']
+            role = request.form['role']
 
-            check_auth(email,password,add=True)
-            return redirect(url_for("admin"))
+            check_auth(email,password,role,add=True)
+            session['user'] = user
+            return redirect(url_for("admin_get"))
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -38,11 +41,10 @@ def login():
         email = request.form['email']
         password = request.form['password']
         check = check_auth()
-        print(check)
         if check:   
             auth_file = open("./auth.json","r+")
             data = json.load(auth_file)
-            
+            user = {}
             for rec in data['auth']:
                 if rec['email'] == email:
                    user = rec
@@ -82,9 +84,9 @@ def admin_get():
     if 'user' in session:
         user = session['user']
         tags = getTagList()
-        unanswered_question = getUnanswered()
+        (unanswered_question,adminData) = getUnanswered(user)
         count = len(unanswered_question)
-        return render_template("admin.html",tags=tags,unanswered=unanswered_question,count=count)
+        return render_template("admin.html",user=user,tags=tags,unanswered=unanswered_question,adminInfo=adminData,count=count)
     else:
         return redirect(url_for('login'))
 
@@ -107,37 +109,47 @@ def unanswered_post():
     question = request.form["question"]
     unformattedResponse = request.form["addAnswer"]
     tags = request.form["addAnstags"]
+    FILE = "unanswered.json"
 
-    if addQuestion(question,unformattedResponse,tags,switch=True):
-        try:
-            file = open("./unanswered.json","r+")
-            data = json.load(file)
+    try:
+        file = open(FILE,"r+")
+        data = json.load(file)
 
-            for i in range(len(data['question'])):
+        if user['role'] == 'superAdmin':
+            if addQuestion(question,unformattedResponse,tags,switch=True):
+                for i in data['question']:
+                    if question in data['question'][i]:
+                        data['question'][i]['superAdminApproval'] = 1
+                        data['question'][i]['superAdminId'] = user['email']
+            
+                
+            else:
+                flash("Question not added.")
+        else: #For Normal Admins
+            for i in data['question']:
                 if question in data['question'][i]:
-                    data['question'][i].pop(question) 
+                    data['question'][i]["response"] = unformattedResponse
+                    data['question'][i]["question"] = 1
+                    data['question'][i]["adminId"] = user['email']
+        
+        file = open(FILE,"w+")
+        file.seek(0)
+        json.dump(data,file)
             
-            file = open("./unanswered.json","w+")
-            file.seek(0)
-            json.dump(data,file)
-            
-            flash("Question added Successfully...")
-            session['user'] = user
-        except:
-            pass
-        finally:
-            file.close()
-    else:
-        flash("Question not added.")
+        flash("Question added Successfully...")
+        session['user'] = user
 
-    return redirect(url_for('admin_get'))
+    except Exception as e:
+        print(f"Error while writing to {FILE}.",e)
+    finally:
+        file.close()
+        return redirect(url_for('admin_get'))
 
 @app.route("/api/tag",methods=['GET'])
 def fetchTag():
     args = request.args
     args = args.to_dict()
     return getTagQuestion(args.get("tag"))
-     
-     
+   
 if __name__ == "__main__":
     app.run(debug=True)
