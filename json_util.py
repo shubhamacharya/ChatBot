@@ -9,15 +9,13 @@ def formatList(unformattedList):
     return list(map(lambda x : re.sub("\r","",x),tempList))
 
 def addQuestion(pattern,response,tag,switch=False):
-    file = open("./test.json","r+")
-    data = json.load(file)
-
     questionFlag = False
     tagFlag = False
-
-    tags = getTagList()
     index = -1
     try:
+        file = open("./test.json","r+")
+        data = json.load(file)
+        tags = getTagList()
         index = tags.index(tag)
     except ValueError:
         tagFlag = False
@@ -25,7 +23,6 @@ def addQuestion(pattern,response,tag,switch=False):
     if index != -1:
         tagFlag == True 
     
-
     if switch:
         for i in range(len(data['intents'])):
             if pattern in data['intents'][i]['patterns']:
@@ -56,13 +53,17 @@ def addQuestion(pattern,response,tag,switch=False):
         return op
 
 def getTagList():
-    file = open("./test.json","r")
-    data = json.load(file)
-    tags = []
-    for intent in data['intents']:
-        tags.append(intent['tag'])
-    file.close()
-    return tags
+    try:
+        file = open("./test.json","r")
+        data = json.load(file)
+        tags = []
+        for intent in data['intents']:
+            tags.append(intent['tag'])
+    except Exception as e:
+        print("Error while fetching tag list.",e)
+    finally:
+        file.close()
+        return tags
 
 def getTagQuestion(tag):
     try:
@@ -72,25 +73,36 @@ def getTagQuestion(tag):
         for intent in data['intents']:
             if intent['tag'] == tag:
                 question = dict(intent)
-    except:
-        print("Error")
+    except Exception as e:
+        print("Error while fetching question tag",e)
     finally:
         file.close()
         return question
 
-def getUnanswered():
+def getUnanswered(user):
     unansweredList = []
+    adminInfo = []
     if path.exists("./unanswered.json"):
         try:
             file = open("./unanswered.json","r+")
             data = json.load(file)
-            for ques in data['question']:
-                unansweredList.extend(ques.keys())
-        except:
-            pass
+            if user == 'superAdmin':
+                for ques in data['question']:
+                    if ques[list(ques)[0]] == 1 and ques['adminId'] != "":
+                        unansweredList.append(list(ques)[0])
+                        adminInfo.append(ques['adminId'])
+            else:
+                for ques in data['question']:
+                    if ques[list(ques)[0]] == 0 and ques['superAdminApproval'] == 0:
+                        unansweredList.append(list(ques)[0])
+                        
+            #print(unansweredList)
+            #print(adminInfo)
+        except Exception as e:
+            print("Error While fetching the Unanswered Questions List.",e)
         finally:
             file.close()
-            return unansweredList
+            return (unansweredList,adminInfo)
 
 def unansweredWriteJSON(unanswered):
     '''
@@ -99,31 +111,49 @@ def unansweredWriteJSON(unanswered):
     2. Call addQuestion method to add or append the questions.
     3. Remove all the questions from file whoes flag is set.
     '''
-    if not path.exists('./unanswered.json') or stat('./unanswered.json').st_size==0:
-        print("Creating File 'unanswered.json'")
-        file = open("./unanswered.json","w+")
-        json.dump({"question":[]},file)
-        file.close()
-    else:
-        unanswer = {unanswered[i]:0 for i in range(len(unanswered))}
-        file = open("./unanswered.json","r+")
+    FILE = './unanswered.json'
+    if not path.exists(FILE) or stat(FILE).st_size==0:
+        print(f"Creating File {FILE}.")
+        try:
+            file = open(FILE,"w+")
+            json.dump({"question":[]},file)
+        except Exception as e:
+            print(f"Error while creating {FILE}.",e)
+        finally:
+            file.close()
+    
+    try:
+        file = open(FILE,"r+")
         data = json.load(file)
-        data['question'].append(unanswer)
+        for i in range(len(unanswered)):
+            data['question'].append({    
+                unanswered[i]:0,
+                "response":"",
+                "adminId" : "",
+                "superAdminApproval" : 0,
+                "superAdminId" :""
+            })
         print("Writing to the file 'unanswered.json'")
+        
         file.seek(0)
         json.dump(data,file,indent=4)
+    
+    except Exception as e:
+        print(f"Error while writing to the {FILE}.",e)
+    finally:
         file.close()
 
-def check_auth(email="",password="",add=False):
+def check_auth(email="",password="",role="",add=False):
     '''
     Creates the default admin user if file does not exists.
     '''
+    AUTH_FILE = './auth.json'
     if not add:
-        if not path.exists('./auth.json') or stat('./auth.json').st_size==0:
+        if not path.exists(AUTH_FILE) or stat(AUTH_FILE).st_size==0:
             try:
-                file = open("./auth.json","w+")
+                file = open(AUTH_FILE,"w+")
                 password = generate_password_hash('admin123','sha256')
-                json.dump({"auth":[{'email':'admin@gmail.com','password':password,'status':"active"}]},file)
+                json.dump({"auth":[{'email':'admin@gmail.com','password':password,'status':"active",'role':'superAdmin'}]},file)
             except:
                 print("Error")
             finally:
@@ -132,13 +162,18 @@ def check_auth(email="",password="",add=False):
         else:
             return True
     else:
-        file = open("./auth.json","r+")
-        data = json.load(file)
-        password = generate_password_hash(password,'sha256')
-        data['auth'].append({'email':email,'password':password,'status':"active"})
+        try:
+            file = open(AUTH_FILE,"r+")
+            data = json.load(file)
+            password = generate_password_hash(password,'sha256')
+            data['auth'].append({'email':email,'password':password,'status':"active",'role':role})
+            file.seek(0)
+            file.write(json.dumps(data))
+        except Exception as e:
+            print("Error while adding new admin.",e)
+        finally:
+            file.close()
 
-'''question = "this is question 1"
-ans = "this is ans 1"
-tag = "test"
-addQuestion(question,ans,tag,switch=True)
-'''
+#questions = ["this is question 1","this is question 2","this is question 3","this is question 4"]
+#getUnanswered('Admin')
+#unansweredWriteJSON(questions)
