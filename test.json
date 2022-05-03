@@ -1,5 +1,6 @@
 {
-    "intents": [{
+    "intents": [
+        {
             "tag": "greeting",
             "patterns": [
                 "Hi",
@@ -48,6 +49,15 @@
             "patterns": [
                 "this is question 1",
                 "this is question 2"
+            ],
+            "responses": [
+                "this is answer 1"
+            ]
+        },
+        {
+            "tag": "regadmin@gmail.com",
+            "patterns": [
+                "this is question 1"
             ],
             "responses": [
                 "this is answer 1"
