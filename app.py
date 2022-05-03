@@ -1,3 +1,6 @@
+from crypt import methods
+from http.client import responses
+from urllib import response
 from flask import Flask,session,redirect,render_template,request,jsonify, url_for,flash
 from flask_cors import CORS
 from chat import get_response
@@ -82,11 +85,15 @@ def predict():
 @app.route("/admin",methods=['GET'])
 def admin_get():
     if 'user' in session:
-        user = session['user']
-        tags = getTagList()
-        (unanswered_question,adminData) = getUnanswered(user)
-        count = len(unanswered_question)
-        return render_template("admin.html",user=user,tags=tags,unanswered=unanswered_question,adminInfo=adminData,count=count)
+        try:
+            createRequiredFiles('./unanswered.json')
+            user = session['user']
+            tags = getTagList()
+            unanswered_question = getUnanswered(user)
+            count = len(unanswered_question)
+        except Exception as e:
+            print(e)
+        return render_template("admin.html",user=user,tags=tags,unanswered=unanswered_question,count=count)
     else:
         return redirect(url_for('login'))
 
@@ -109,7 +116,7 @@ def unanswered_post():
     question = request.form["question"]
     unformattedResponse = request.form["addAnswer"]
     tags = request.form["addAnstags"]
-    FILE = "unanswered.json"
+    FILE = "./unanswered.json"
 
     try:
         file = open(FILE,"r+")
@@ -118,25 +125,25 @@ def unanswered_post():
         if user['role'] == 'superAdmin':
             if addQuestion(question,unformattedResponse,tags,switch=True):
                 for i in data['question']:
-                    if question in data['question'][i]:
-                        data['question'][i]['superAdminApproval'] = 1
-                        data['question'][i]['superAdminId'] = user['email']
-            
-                
+                    if question in list(i.keys())[0]:
+                        i['superAdminApproval'] = 1
+                        i['superAdminId'] = user['email']          
             else:
                 flash("Question not added.")
         else: #For Normal Admins
             for i in data['question']:
-                if question in data['question'][i]:
-                    data['question'][i]["response"] = unformattedResponse
-                    data['question'][i]["question"] = 1
-                    data['question'][i]["adminId"] = user['email']
+                if question in list(i.keys())[0]:
+                    i["response"] = unformattedResponse
+                    i["tag"] = tags
+                    i["adminId"] = user['email']
+                    i[question] = 1
         
         file = open(FILE,"w+")
         file.seek(0)
-        json.dump(data,file)
+        json.dump(data,file,indent=4)
             
         flash("Question added Successfully...")
+        print("Question added Successfully...")
         session['user'] = user
 
     except Exception as e:
