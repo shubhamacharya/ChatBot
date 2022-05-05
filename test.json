@@ -1,5 +1,6 @@
 {
-    "intents": [{
+    "intents": [
+        {
             "tag": "greeting",
             "patterns": [
                 "Hi",
@@ -51,6 +52,42 @@
             ],
             "responses": [
                 "this is answer 1"
+            ]
+        },
+        {
+            "tag": "",
+            "patterns": [
+                "hello How can you help me?"
+            ],
+            "responses": [
+                "we can provide you our admin mail you can mail him/her.he will share you the details"
+            ]
+        },
+        {
+            "tag": "",
+            "patterns": [
+                "will you help me"
+            ],
+            "responses": [
+                "please we can provide you any help"
+            ]
+        },
+        {
+            "tag": "",
+            "patterns": [
+                ""
+            ],
+            "responses": [
+                ""
+            ]
+        },
+        {
+            "tag": "",
+            "patterns": [
+                ""
+            ],
+            "responses": [
+                ""
             ]
         }
     ]
