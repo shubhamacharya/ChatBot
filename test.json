@@ -55,39 +55,12 @@
             ]
         },
         {
-            "tag": "",
+            "tag": "regadmin@gmail.com",
             "patterns": [
-                "hello How can you help me?"
+                "this is question 1"
             ],
             "responses": [
-                "we can provide you our admin mail you can mail him/her.he will share you the details"
-            ]
-        },
-        {
-            "tag": "",
-            "patterns": [
-                "will you help me"
-            ],
-            "responses": [
-                "please we can provide you any help"
-            ]
-        },
-        {
-            "tag": "",
-            "patterns": [
-                ""
-            ],
-            "responses": [
-                ""
-            ]
-        },
-        {
-            "tag": "",
-            "patterns": [
-                ""
-            ],
-            "responses": [
-                ""
+                "this is answer 1"
             ]
         }
     ]

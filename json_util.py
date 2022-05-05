@@ -21,27 +21,27 @@ def addQuestion(pattern,response,tag,switch=False):
         tagFlag = False
 
     if index != -1:
-        tagFlag == True 
-    
-    if switch:
+        tagFlag = True
+        
+    if switch: 
         for i in range(len(data['intents'])):
             if pattern in data['intents'][i]['patterns']:
                 questionFlag = True
                 
-        pattern = formatList(pattern)
-        response = formatList(response)
-    print(data['intents'][index])
+    pattern = formatList(pattern)
+    response = formatList(response)
 
     if tagFlag: # Append to the tag if tag is present 
         if questionFlag:
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
-            data['intents'][index]['responses'].extend(response)    
+            data['intents'][index]['responses'].extend(response)   
+            print(data,"\n\n") 
     else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
-         
+        print(data)
     try:
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -81,28 +81,46 @@ def getTagQuestion(tag):
 
 def getUnanswered(user):
     unansweredList = []
+    responses = []
     adminInfo = []
+    tag = []
+    zip_ret = []
+
     if path.exists("./unanswered.json"):
         try:
             file = open("./unanswered.json","r+")
             data = json.load(file)
-            if user == 'superAdmin':
+            if user['role'] == 'superAdmin':
                 for ques in data['question']:
                     if ques[list(ques)[0]] == 1 and ques['adminId'] != "":
                         unansweredList.append(list(ques)[0])
                         adminInfo.append(ques['adminId'])
+                        responses.append(ques['response'])
+                        tag.append(ques['tag'])
+                zip_ret = list(zip(unansweredList,responses,adminInfo))
+            
             else:
                 for ques in data['question']:
                     if ques[list(ques)[0]] == 0 and ques['superAdminApproval'] == 0:
-                        unansweredList.append(list(ques)[0])
-                        
-            #print(unansweredList)
-            #print(adminInfo)
+                        zip_ret.append(list(ques)[0])
+
         except Exception as e:
             print("Error While fetching the Unanswered Questions List.",e)
         finally:
             file.close()
-            return (unansweredList,adminInfo)
+            return zip_ret
+
+def createRequiredFiles(FILE):
+    if FILE == './unanswered.json':
+        if not path.exists(FILE) or stat(FILE).st_size==0:
+            print(f"Creating File {FILE}.")
+            try:
+                file = open(FILE,"w+")
+                json.dump({"question":[]},file)
+            except Exception as e:
+                print(f"Error while creating {FILE}.",e)
+            finally:
+                file.close()
 
 def unansweredWriteJSON(unanswered):
     '''
@@ -112,16 +130,7 @@ def unansweredWriteJSON(unanswered):
     3. Remove all the questions from file whoes flag is set.
     '''
     FILE = './unanswered.json'
-    if not path.exists(FILE) or stat(FILE).st_size==0:
-        print(f"Creating File {FILE}.")
-        try:
-            file = open(FILE,"w+")
-            json.dump({"question":[]},file)
-        except Exception as e:
-            print(f"Error while creating {FILE}.",e)
-        finally:
-            file.close()
-    
+    createRequiredFiles(FILE)
     try:
         file = open(FILE,"r+")
         data = json.load(file)
@@ -129,6 +138,7 @@ def unansweredWriteJSON(unanswered):
             data['question'].append({    
                 unanswered[i]:0,
                 "response":"",
+                "tag":"",
                 "adminId" : "",
                 "superAdminApproval" : 0,
                 "superAdminId" :""
@@ -174,6 +184,3 @@ def check_auth(email="",password="",role="",add=False):
         finally:
             file.close()
 
-#questions = ["this is question 1","this is question 2","this is question 3","this is question 4"]
-#getUnanswered('Admin')
-#unansweredWriteJSON(questions)
