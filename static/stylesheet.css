@@ -191,7 +191,6 @@ body {
 
 /* Admin Page */
 
-}
 .split-left {
     float: left;
     width: 10%;
@@ -241,10 +240,6 @@ body {
     margin-left: 82.5%;
 }
 
-.search-bar {
-    margin-right: 20%;
-}
-
 .search-btn {
     margin-top: 2%;
     margin-left: 43%
@@ -252,6 +247,7 @@ body {
 
 .search-bar {
     margin-top: 2%;
+    margin-right: 20%;
 }
 
 .hidden-btn {
@@ -278,7 +274,7 @@ body {
     display: block;
 }
 
-.search_select_box {
+/*.search_select_box {
     max-width: 400px;
     margin: 80px auto;
 }
@@ -292,7 +288,7 @@ body {
     padding: 15px 25px;
     color: #fff !important;
     font-size: 20px;
-}
+}*/
 
 
 /* Changes the color of the dropdown buttton on hover */
