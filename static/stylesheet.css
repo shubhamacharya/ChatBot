@@ -78,6 +78,7 @@ body {
     /*background-color: rgb(235, 235, 235);*/
     background-image: linear-gradient(to bottom right, rgb(16, 38, 99), rgb(48, 138, 240));
     border-radius: 10px 10px 0px 0px;
+
     padding: 10px 0px 10px 10px;
 }
 
@@ -251,22 +252,41 @@ body {
 }
 
 .hidden-btn {
-    background: transparent;
+    background:transparent;
     border: none !important;
+    font-size: 18px;
+    margin-bottom: 1px;
+
 }
 
 .register-card {
     margin-top: 10%;
     margin-left: 10%;
     float: right;
-    margin-right: 50%;
+    margin-right: 45%;
     margin-bottom: 10%;
+    font-size: 20px;
+   }
+.card-body{
+    font-size: 20px;
 }
-
+.mb-3 .item:hover{
+    /*outline: 0px solid transparent;*/
+    border: 1px solid #0198fa;
+    -webkit-transition: all 0.2s ease-in-out;
+   /* transition: all 0.2s ease-in-out;*/
+}
+.me-3 .first:hover{
+    border: 1px solid #0198fa;
+    transition: all 0.2s ease-in-out;
+    }
 .register-btn {
     float: center
-}
+   }
 
+.first:hover{
+    border: 1px solid #0198fa;
+}
 
 /* Dropdown menu will open on hoverover */
 
@@ -274,32 +294,17 @@ body {
     display: block;
 }
 
-/*.search_select_box {
-    max-width: 400px;
-    margin: 80px auto;
-}
+/* Changes the color of the dropdown button on hover */
 
-.search_select_box select {
-    width: 100;
-}
-
-.search_select_box button {
-    background-color: #080342 !important;
-    padding: 15px 25px;
-    color: #fff !important;
+.dropdown-toggle {
+    background:transparent;
     font-size: 20px;
-}*/
-
-
-/* Changes the color of the dropdown buttton on hover */
-
-.dropdown:hover .dropdown-toggle {
-    background-color: #969090;
-}
+   }
 
 .dropdown {
     margin-top: 15px;
     padding: 8px;
+    font-size: 18px;
 }
 
 #addNewTag {
@@ -315,4 +320,13 @@ body {
 .submit{
     /*padding-top: 20px;*/
     margin-top: 20px;
+    font-size: 20px;
+    
 }
+.submit:hover{
+    outline: 0px solid transparent;
+    border: 1px solid #eaeef0;
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
