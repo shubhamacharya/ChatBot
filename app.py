@@ -1,7 +1,4 @@
-from crypt import methods
-from http.client import responses
-from urllib import response
-from flask import Flask,session,redirect,render_template,request,jsonify, url_for,flash
+from flask import Flask,session,redirect,render_template,request,jsonify,url_for,flash,make_response
 from flask_cors import CORS
 from chat import get_response
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -31,7 +28,6 @@ def register():
             email = request.form['email']
             password = request.form['password']
             role = request.form['role']
-
             check_auth(email,password,role,add=True)
             session['user'] = user
             return redirect(url_for("admin_get"))
@@ -154,9 +150,16 @@ def unanswered_post():
 
 @app.route("/api/tag",methods=['GET'])
 def fetchTag():
-    args = request.args
-    args = args.to_dict()
-    return getTagQuestion(args.get("tag"))
-   
+    args = request.args.to_dict()
+    opt =  getTagQuestion(args.get("tag"))
+    return opt
+
+@app.route("/api/updateQuestion",methods=['POST'])
+def updateQuestion():
+    req = request.get_json()
+    print(req)
+    res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
+    return res
+
 if __name__ == "__main__":
     app.run(debug=True)
