@@ -33,6 +33,59 @@ function getTime() {
     return time;
 }
 
+function getEdit() 
+{
+  var question = document.getElementById('datalistOptionsInput').value
+  document.getElementById('editableQuestion').value = question
+
+  var combineResponse = "";
+  for(var res in response)
+  {
+    combineResponse += response[res] + "\n"
+  }
+    document.getElementById('responsesTextarea').value = combineResponse
+}
+
+function updateQuestion()
+{
+    var updatdeQuestion = ""
+    var updatedResponses = ""
+   
+    var tag = document.getElementById('searchTag').value
+
+    if(questionChange)
+    {
+      updatedQuestion = document.getElementById("editableQuestion").value
+    }
+
+    if(responseChange)
+    {
+      updatedResponses = document.getElementById("responsesTextarea").value
+    }
+
+    updatedJSON = {pattern:updatedQuestion,responses:updatedResponses,tag:tag}
+
+    var options = {
+                    method:'POST',
+                    headers: 
+                    {
+                      'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(updatedJSON)
+                  }
+    fetch("/api/updateQuestion",options).then(() => {
+        if(response.status !== 200)
+        {
+            console.log(response.status)
+            return ;
+        }
+
+        response.json().then((data) => {
+            console.log("Successfully Updated")
+        })
+    })
+  }
+
 // Gets the first message
 function firstBotMessage() {
     let firstMessage = "Hi this is ChatterBot"
