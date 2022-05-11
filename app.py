@@ -190,18 +190,91 @@ def fetchTag():
 
 @app.route("/api/updateQuestion",methods=['POST'])
 def updateQuestion():
+    user = session['user']
     req = request.get_json()
-    
-    unformattedQuestion = list(req["pattern"])
-    unformattedAnswers = list(req["responses"])
+    FILE = './logs.json'
+
+    print(req)
+    unformattedNewQuestion = req["pattern"]
+    unformattedNewAnswers = req["responses"]
+    unformattedOldQuestion = list(req["oldQuestion"])
     tag = req["tag"]
 
-    patterns  = formatList(unformattedQuestion)
-    response = formatList(unformattedResponse)
-    
-    #Call to add updated question
-    res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
-    return res
+    patterns  = formatList(unformattedNewQuestion)
+    response = formatList(unformattedNewAnswers)
+    oldPattern = formatList(unformattedOldQuestion)
+
+    try:
+        file = open(FILE,'r+')
+        data = json.load(file)
+        #Call to add updated question
+        if user['role'] == 'superAdmin':
+            pass
+        else:
+            data["updated"].append({
+                "oldQuestion" : oldPattern,
+                "newQuestion" : patterns,
+                "response" : response,
+                "tag" : tag,
+                "adminId" : user['email'],
+                "timeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"),
+                "superAdminApproval" : 0,
+                "superAdminId" : "",
+                "superAdminTimeStamp" : ""    
+            })
+
+            file = open(FILE,"w+")
+            file.seek(0)
+            json.dump(data,file,indent=4)
+            
+            flash("Question Updated Successfully...")
+            print("Question Updated Successfully...")
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()    
+        res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
+        return res
+
+@app.route("/api/validate",methods=['POST'])
+def validateUser():
+    user = session['user']
+    password = request.get_json()
+    res = ""
+    try:
+        auth_file = open("./auth.json","r+")
+        data = json.load(auth_file)
+        for rec in data['auth']:
+            if rec['email'] == user['email']:
+                if not check_password_hash(rec['password'],password):
+                    res = make_response(jsonify({"message":"Wrong Password"}),404)
+                else:
+                    res = make_response(jsonify({"message":"Validation Success."}),200)
+    except Exception as e:
+        print(e)
+    finally:
+        auth_file.close()
+        return res    
+
+@app.route("/api/updatePassword",methods=['POST'])
+def updatePassword():
+    user = session['user']
+    password = request.get_json()
+    res = ""
+    try:
+        auth_file = open("./auth.json","r+")
+        data = json.load(auth_file)
+
+        for rec in data['auth']:
+            if rec['email'] == user['email']:
+                rec['password'] = password
+                res = make_response(jsonify({"message":"Password Updated Successfully."}),200)
+    except Exception as e:
+        print(e)
+        res = make_response(jsonify({"message":"Error While Updating Password."}),404)
+    finally:
+        auth_file.close()
+        return res
 
 if __name__ == "__main__":
     app.run(debug=True)
