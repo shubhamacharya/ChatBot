@@ -115,66 +115,6 @@
             "superAdminApproval": 0,
             "superAdminId": "",
             "superAdminTimeStamp": ""
-        },
-        {
-            "oldQuestion": [
-                "what is your name?"
-            ],
-            "newQuestion": [
-                "what is your ?"
-            ],
-            "oldResponse": [
-                "yes i will help you"
-            ],
-            "newResponse": [
-                "yes i will help you......"
-            ],
-            "tag": "testing",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "13-May-2022 (11:37:33.580690)",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": ""
-        },
-        {
-            "oldQuestion": [
-                "what is your name?"
-            ],
-            "newQuestion": [
-                "what is your ?"
-            ],
-            "oldResponse": [
-                "yes i will help you"
-            ],
-            "newResponse": [
-                "yes i will help you......"
-            ],
-            "tag": "testing",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "13-May-2022 (11:37:41.103218)",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": ""
-        },
-        {
-            "oldQuestion": [
-                "what is your name?"
-            ],
-            "newQuestion": [
-                "what is your ?"
-            ],
-            "oldResponse": [
-                "yes i will help you"
-            ],
-            "newResponse": [
-                "yes i will help you......"
-            ],
-            "tag": "testing",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "13-May-2022 (11:38:46.808857)",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": ""
         }
     ]
 }
