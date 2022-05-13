@@ -6,9 +6,9 @@
             "tag": "test",
             "adminId": "regadmin@gmail.com",
             "adminTimeStamp": "09-May-2022 (21:21:56.639523)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "09-May-2022 (21:29:12.567157)"
+            "superAdminApproval": 0,
+            "superAdminId": "",
+            "superAdminTimeStamp": ""
         },
         {
             "this is question 2": 1,
@@ -16,9 +16,9 @@
             "tag": "test",
             "adminId": "regadmin@gmail.com",
             "adminTimeStamp": "09-May-2022 (21:29:36.573496)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "09-May-2022 (21:29:49.519694)"
+            "superAdminApproval": 0,
+            "superAdminId": "",
+            "superAdminTimeStamp": ""
         },
         {
             "this is question 3": 0,
@@ -55,5 +55,28 @@
             "timeStamp": "09-May-2022 (22:55:56.512997)"
         }
     ],
-    "updated": []
+    "updated": [
+        {
+            "oldQuestion": [
+                "this is question 1"
+            ],
+            "newQuestion": [
+                "this is question 1."
+            ],
+            "oldResponse": [
+                "this is answer 1",
+                "this is answer 2"
+            ],
+            "newResponse": [
+                "this is answer 1.",
+                "this is answer 2"
+            ],
+            "tag": "test",
+            "adminId": "regadmin@gmail.com",
+            "timeStamp": "12-May-2022 (14:48:00.370180)",
+            "superAdminApproval": 0,
+            "superAdminId": "",
+            "superAdminTimeStamp": ""
+        }
+    ]
 }
