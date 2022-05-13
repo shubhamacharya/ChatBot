@@ -70,12 +70,9 @@ def logout():
 @app.route("/predict",methods=['POST'])
 def predict():
     text = request.get_json().get("message")
-    # TODO : check text validity
-    global unanswered_question
-    
     response,text = get_response(text)
-    unanswered_question.append(text)
-    unansweredWriteJSON(unanswered_question)
+    if response == "I am unable to understand....":
+        unansweredWriteJSON(unanswered_question)
     message = {"answer":response}
     return jsonify(message)
 
@@ -309,5 +306,11 @@ def updatePassword():
         auth_file.close()
         return res
 
+@app.route("/api/fetchUserMail",methods=['POST'])
+def fetchUserMail():
+    param = request.get_json()
+    print(param)
+    res = make_response(jsonify({"message":"Thanks!! We will reach to you soon."}),200)
+    return res
 if __name__ == "__main__":
     app.run(debug=True)
