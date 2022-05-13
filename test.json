@@ -53,6 +53,15 @@
             "responses": [
                 "this is answer 1"
             ]
+        },
+        {
+            "tag": "regadmin@gmail.com",
+            "patterns": [
+                "this is question 1"
+            ],
+            "responses": [
+                "this is answer 1"
+            ]
         }
     ]
 }
