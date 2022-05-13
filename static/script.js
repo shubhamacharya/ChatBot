@@ -46,10 +46,48 @@ function firstBotMessage() {
 
 firstBotMessage();
 
+unanswered_question = ""
+unanswered_count = 0
+userMail = ""
 // Retrieves the response
 const getHardResponse = async (userText) => { 
-    let botResponse = await getBotResponse(userText)
-    console.log("Bot Response"+botResponse);
+  let botResponse = ""
+ 
+  let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  botResponse = await getBotResponse(userText)
+  if(unanswered_count == 2)
+  {
+      botResponse = "Please provide your email"
+      if(userText.match(mailformat))
+      {
+        userMail = userText
+        botResponse = "Please write your question."
+        if(userMail != "" && unanswered_question == "")
+        {
+          unanswered_question = userText
+          let res = await fetch('/api/fetchUserMail',{
+            method: 'POST',
+            body: JSON.stringify({userEmail: userMail,userQuestions: unanswered_question}),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+          })
+      if(res.status == 200)
+      {
+        r = await res.json()
+        botResponse = r.message
+        unanswered_count = 0
+      }
+        }
+       
+      }
+  }
+
+  if(botResponse == "I am unable to understand....")
+  {
+    unanswered_count += 1
+  }
+    console.log("Bot Response"+botResponse+"\t"+unanswered_question);
     let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
     $("#chatbox").append(botHtml);
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
@@ -115,7 +153,6 @@ const getBotResponse = async(input) => {
             },
         });
     let r = await res.json();
-            console.log("Get Bot Response "+r.answer);
             return r.answer
     }
     catch(error) { 
