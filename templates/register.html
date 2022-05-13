@@ -19,14 +19,14 @@
                     <form action="/register" method="POST">
                         <div class="mb-3 ">
                           <label for="Email1" class="form-label ">Email address</label>
-                          <input type="email" class="form-control item" name="email" aria-describedby="email">
+                          <input type="email" class="form-control item" name="email" aria-describedby="email" required>
                         </div>
                         <div class="mb-3 ">
                           <label for="Password" class="form-label">Password</label>
-                          <input type="password" class="form-control item" name="password">
+                          <input type="password" class="form-control item" name="password" required>
                         </div>
 
-                        <select name="role" class="custom-select">
+                        <select name="role" class="custom-select" required>
                           <option selected>Select Role</option>
                           <option  value="superAdmin">Super Admin</option>
                           <option  value="admin">Admin</option>

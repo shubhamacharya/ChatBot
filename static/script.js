@@ -122,3 +122,172 @@ const getBotResponse = async(input) => {
             console.error('Error:',error);
         }
 }
+
+const changePasswd = async () => 
+{
+	//Takes Current Password from user and validates with database.
+  //Sets isConfirmed on successfull validation.
+  const validationRes = await Swal.fire({
+		title: 'Validate Password',
+		input: 'password',
+		inputAttributes: {
+			autocapitalize: 'off'
+		},
+		showCancelButton: true,
+		confirmButtonText: 'Validate',
+		showLoaderOnConfirm: true,
+		preConfirm: (password) => {
+			return fetch('/api/validate', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(password)
+				}).then(response => {
+					if (response.status != 200) {
+						throw new Error(response.message)
+					}
+					return response.json()
+				})
+				.catch(error => {
+					Swal.showValidationMessage(
+						`Please Enter the Correct Password: ${error}`
+					)
+				})
+		},
+		allowOutsideClick: () => !Swal.isLoading()
+	})
+ if(validationRes.isConfirmed)
+ {
+   //If validation is successfull, asks user for new password
+   var passwords 
+   await Swal.fire({
+    title: 'Change Password',
+    html: '<input type="password" id="swal-input1" class="swal2-input" placeholder="New Password">' +
+      '<input type="password" id="swal-input2" class="swal2-input" placeholder="Retype Password">',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Change Password',
+    showLoaderOnConfirm: true,
+    preConfirm: function() {
+      return new Promise(function(resolve) {
+        resolve([
+          $('#swal-input1').val(),
+          $('#swal-input2').val()
+        ])
+      }).then(response => {
+        if(response[0]!=response[1])
+        {
+          throw new Error("Password Not Matching.")
+        }
+        passwords = response
+        
+      }).catch(error => {
+        Swal.showValidationMessage(`Password Not Matching.`)
+      })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  })
+
+  let change = await fetch('/api/updatePassword', 
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(passwords[0])
+  }).then(final_response => {
+    if(final_response.status != 200)
+    {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Error While Changing Password',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+    return final_response.json()
+  }).catch(error => {
+    console.log(error.message)
+  })
+
+  if(change.message)
+  {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: change.message,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+
+  }	
+}
+
+question = ""
+var combineResponse
+
+const getEdit = () =>
+{
+  question = document.getElementById('datalistOptionsInput').value
+  document.getElementById('editableQuestion').value = question
+  var array = new Array()
+  for(var res in response)
+  {
+    array.push(response[res])
+  }
+  combineResponse = array.join('\n')
+  document.getElementById('responsesTextarea').value = combineResponse
+}
+
+const updateQuestion = async () =>
+{
+    let updatedQuestion = ""
+    let updatedResponses = ""
+   
+    let tag = document.getElementById('searchTag').value
+
+    if(questionChange)
+    {
+        updatedQuestion = document.getElementById("editableQuestion").value
+    }
+
+    if(responseChange)
+    {
+      updatedResponses = document.getElementById("responsesTextarea").value
+    }
+
+    updatedJSON = {"oldQuestion":question,"pattern":updatedQuestion,"oldResponse":combineResponse,"responses":updatedResponses,"tag":tag}
+
+    const options = {
+                    method:'POST',
+                    headers: 
+                    {
+                      'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(updatedJSON)
+                  }
+    let response = await fetch("/api/updateQuestion",options)
+    if(response.status != 200)
+    {
+      console.log(response.status)
+    }
+
+    let res = await response.json()
+    if(res.message)
+  {
+    Swal.fire({
+      position: 'top-right',
+      icon: 'success',
+      title: res.message,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+}
+   
+  
