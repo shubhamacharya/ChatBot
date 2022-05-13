@@ -45,8 +45,7 @@ def addQuestion(pattern,response,tag,switch=False):
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
-            data['intents'][index]['responses'].extend(response)   
-            print(data,"\n\n") 
+            data['intents'][index]['responses'].extend(response)
     else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
