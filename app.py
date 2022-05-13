@@ -107,38 +107,51 @@ def addQuestion_post():
     responses = formatList(unformattedResponses)
     tag = request.form["newTag"]
     
-    if addQuestion(pattern,responses,tag):
-        try:
-            file = open(FILE,"r+")
-            data = json.load(file)
-            
+    try:
+        file = open(FILE,"r+")
+        data = json.load(file)
+        if user['role'] == "superAdmin":
+            if addQuestion(pattern,responses,tag):
+                data["added"].append({
+                    "questions" : pattern,
+                    "response" : responses,
+                    "tag" : tag,
+                    "superAdminId" : user['email'],
+                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                })
+        else:
             data["added"].append({
                 "questions" : pattern,
                 "response" : responses,
                 "tag" : tag,
                 "adminId" : user['email'],
-                "timeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                "timeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"),
+                "superAdminApproval" : 0,
+                "superAdminId": "",
+                "superAdminTimeStamp" : ""
             })
-
-            file = open(FILE,"w+")
-            file.seek(0)
-            json.dump(data,file,indent=4)
-            
-            flash("Question added Successfully...")
-            print("Question added Successfully...")     
-        except Exception as e:
-            print(e)
-        finally:
-            file.close()
-            session['user'] = user
-            return redirect(url_for('admin_get'))
+        file = open(FILE,"w+")
+        file.seek(0)
+        json.dump(data,file,indent=4)
+        
+        flash("Question added Successfully...")
+        print("Question added Successfully...")     
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+        session['user'] = user
+        return redirect(url_for('admin_get'))
 
 @app.route("/unanswered",methods=['POST'])
 def unanswered_post():
     user = session['user']
+
     question = request.form["question"]
     unformattedResponse = request.form["addAnswer"]
+    approval = request.form["btnradio"]
     tag = ""
+    
     if(request.form["addAnsTags"] != "nota"):
         tag = request.form["addAnsTags"]
     else:
@@ -154,9 +167,16 @@ def unanswered_post():
             if addQuestion(question,unformattedResponse,tag,switch=True):
                 for i in data['unanswered']:
                     if question in list(i.keys())[0]:
-                        i['superAdminApproval'] = 1
-                        i['superAdminId'] = user['email'] 
-                        i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")    
+                        if approval == "Approved":
+                            i['superAdminApproval'] = 1
+                            i['superAdminId'] = user['email'] 
+                            i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                        else:
+                            i["response"] = unformattedResponse
+                            i['superAdminApproval'] = ""
+                            i["tag"] = tag
+                            i["superAdminId"] = user['email']
+                            i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
             else:
                 flash("Question not added.")
         else: #For Normal Admins
@@ -197,24 +217,35 @@ def updateQuestion():
     print(req)
     unformattedNewQuestion = req["pattern"]
     unformattedNewAnswers = req["responses"]
-    unformattedOldQuestion = list(req["oldQuestion"])
+    unformattedOldQuestion = req["oldQuestion"]
+    unformattedOldAnswer = req["oldResponse"]
     tag = req["tag"]
 
     patterns  = formatList(unformattedNewQuestion)
     response = formatList(unformattedNewAnswers)
     oldPattern = formatList(unformattedOldQuestion)
+    oldResponse = formatList(unformattedOldAnswer)
 
     try:
         file = open(FILE,'r+')
         data = json.load(file)
         #Call to add updated question
         if user['role'] == 'superAdmin':
-            pass
+            data["updated"].append({
+                "oldQuestion" : oldPattern,
+                "newQuestion" : patterns,
+                "oldResponse" : oldResponse,
+                "newResponse" : response,
+                "tag" : tag,
+                "superAdminId" : user['email'],
+                "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")    
+            })
         else:
             data["updated"].append({
                 "oldQuestion" : oldPattern,
                 "newQuestion" : patterns,
-                "response" : response,
+                "oldResponse" : oldResponse,
+                "newResponse" : response,
                 "tag" : tag,
                 "adminId" : user['email'],
                 "timeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"),
@@ -226,14 +257,13 @@ def updateQuestion():
             file = open(FILE,"w+")
             file.seek(0)
             json.dump(data,file,indent=4)
-            
+            res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
             flash("Question Updated Successfully...")
             print("Question Updated Successfully...")
     except Exception as e:
         print(e)
     finally:
         file.close()    
-        res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
         return res
 
 @app.route("/api/validate",methods=['POST'])
