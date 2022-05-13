@@ -33,60 +33,6 @@ function getTime() {
     return time;
 }
 
-function getEdit() 
-{
-  var question = document.getElementById('datalistOptionsInput').value
-  document.getElementById('editableQuestion').value = question
-
-  var combineResponse = "";
-  for(var res in response)
-  {
-    combineResponse += response[res] + "\n"
-  }
-    document.getElementById('responsesTextarea').value = combineResponse
-}
-
-function updateQuestion()
-{
-    var updatdeQuestion = ""
-    var question = document.getElementById('datalistOptionsInput').value
-    var updatedResponses = ""
-   
-    var tag = document.getElementById('searchTag').value
-
-    if(questionChange)
-    {
-        updatdeQuestion = document.getElementById("editableQuestion").value
-    }
-
-    if(responseChange)
-    {
-      updatedResponses = document.getElementById("responsesTextarea").value
-    }
-
-    updatedJSON = {"oldQuestion":question,"pattern":updatedQuestion,"responses":updatedResponses,"tag":tag}
-
-    var options = {
-                    method:'POST',
-                    headers: 
-                    {
-                      'Content-Type': 'application/json'
-                    },
-                    body:JSON.stringify(updatedJSON)
-                  }
-    fetch("/api/updateQuestion",options).then(() => {
-        if(response.status !== 200)
-        {
-            console.log(response.status)
-            return ;
-        }
-
-        response.json().then((data) => {
-            console.log("Successfully Updated")
-        })
-    })
-  }
-
 // Gets the first message
 function firstBotMessage() {
     let firstMessage = "Hi this is ChatterBot"
@@ -281,3 +227,67 @@ const changePasswd = async () =>
 
   }	
 }
+
+question = ""
+var combineResponse
+
+const getEdit = () =>
+{
+  question = document.getElementById('datalistOptionsInput').value
+  document.getElementById('editableQuestion').value = question
+  var array = new Array()
+  for(var res in response)
+  {
+    array.push(response[res])
+  }
+  combineResponse = array.join('\n')
+  document.getElementById('responsesTextarea').value = combineResponse
+}
+
+const updateQuestion = async () =>
+{
+    let updatedQuestion = ""
+    let updatedResponses = ""
+   
+    let tag = document.getElementById('searchTag').value
+
+    if(questionChange)
+    {
+        updatedQuestion = document.getElementById("editableQuestion").value
+    }
+
+    if(responseChange)
+    {
+      updatedResponses = document.getElementById("responsesTextarea").value
+    }
+
+    updatedJSON = {"oldQuestion":question,"pattern":updatedQuestion,"oldResponse":combineResponse,"responses":updatedResponses,"tag":tag}
+
+    const options = {
+                    method:'POST',
+                    headers: 
+                    {
+                      'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(updatedJSON)
+                  }
+    let response = await fetch("/api/updateQuestion",options)
+    if(response.status != 200)
+    {
+      console.log(response.status)
+    }
+
+    let res = await response.json()
+    if(res.message)
+  {
+    Swal.fire({
+      position: 'top-right',
+      icon: 'success',
+      title: res.message,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+}
+   
+  
