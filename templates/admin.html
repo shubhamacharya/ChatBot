@@ -118,7 +118,27 @@
                 <div class="tab-content" id="nav-tabContent">
 
                   <!--Approve Added Start -->
-                     <div class="tab-pane fade show active" id="nav-added" role="tabpanel" aria-labelledby="nav-added-tab">...</div>
+                  <div class="tab-pane fade show active" id="nav-added" role="tabpanel" aria-labelledby="nav-added-tab">
+                     {% if added %}
+                        {% for i in range(add_cnt) %}
+                           <div class="accordion accordion-flush" id="accordion">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-heading{{i}}">
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
+                                    {{added[i]["question"]}}
+                                  </button>
+                                </h2>
+                                <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
+                                  <h2>{{i}}</h2>
+                                </div>
+                              </div>
+                            </div>
+                        {% endfor %}
+                     {% else %}
+                        <h3>No Questions for Approval</h3>
+                     {% endif %}
+                     
+                  </div>
                   <!--Approve Added End -->
 
                   <!--Approve Answered Start-->
@@ -161,7 +181,28 @@
                   <!--Approve Answered End-->
 
                   <!--Approve Updated Start-->
-                     <div class="tab-pane fade" id="nav-updated" role="tabpanel" aria-labelledby="nav-updated-tab">...</div>
+                     <div class="tab-pane fade" id="nav-updated" role="tabpanel" aria-labelledby="nav-updated-tab">
+                        <div class="tab-pane fade show active" id="nav-added" role="tabpanel" aria-labelledby="nav-added-tab">
+                           {% if updated %}
+                              {% for i in range(up_cnt) %}
+                                 <div class="accordion accordion-flush" id="accordion">
+                                    <div class="accordion-item">
+                                      <h2 class="accordion-header" id="flush-heading{{i}}">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
+                                          {{updated[i]["newQuestion"][0]}}
+                                        </button>
+                                      </h2>
+                                      <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
+                                        <h2>{{i}}</h2>
+                                      </div>
+                                    </div>
+                                  </div>
+                              {% endfor %}
+                           {% else %}
+                              <h3>No Questions for Approval</h3>
+                           {% endif %}
+                        </div>
+                     </div>
                   <!--Approve Updated End-->
                   </div>
             </div>

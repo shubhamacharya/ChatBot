@@ -123,7 +123,7 @@ const getBotResponse = async(input) => {
         }
 }
 
-const changePasswd = async () => 
+async function changePasswd() 
 {
 	//Takes Current Password from user and validates with database.
   //Sets isConfirmed on successfull validation.
@@ -231,7 +231,7 @@ const changePasswd = async () =>
 question = ""
 var combineResponse
 
-const getEdit = () =>
+async function getEdit()
 {
   question = document.getElementById('datalistOptionsInput').value
   document.getElementById('editableQuestion').value = question
@@ -244,7 +244,7 @@ const getEdit = () =>
   document.getElementById('responsesTextarea').value = combineResponse
 }
 
-const updateQuestion = async () =>
+async function updateQuestion()
 {
     let updatedQuestion = ""
     let updatedResponses = ""

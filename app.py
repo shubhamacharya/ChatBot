@@ -87,11 +87,14 @@ def admin_get():
             user = session['user']
             tags = getTagList()
             unanswered_question = getUnanswered(user)
+            updated_ques,added_ques = getApproval(user)
+            updated_cnt = len(updated_ques)
+            added_cnt = len(added_ques)
             count = len(unanswered_question)
             print(unanswered_question)
         except Exception as e:
             print(e)
-        return render_template("admin.html",user=user,tags=tags,unanswered=unanswered_question,count=count)
+        return render_template("admin.html",user=user,tags=tags,updated=updated_ques,up_cnt=updated_cnt,added=added_ques,add_cnt=added_cnt,unanswered=unanswered_question,count=count)
     else:
         return redirect(url_for('login'))
 

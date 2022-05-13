@@ -66,12 +66,15 @@
             ]
         },
         {
-            "tag": "regadmin@gmail.com",
+            "tag": "testing",
             "patterns": [
-                "this is question 1"
+                "what is your name?",
+                "what are you ?",
+                "how can i help you?",
+                ""
             ],
             "responses": [
-                "this is answer 1"
+                "yes i will help you"
             ]
         }
     ]

@@ -119,6 +119,27 @@ def getUnanswered(user):
             file.close()
             return zip_ret
 
+def getApproval(user):
+    updated = []
+    added = []
+    FILE = './logs.json'
+    if path.exists(FILE):
+        try:
+            file = open(FILE,"r+")
+            data = json.load(file)
+
+            if user['role'] == "superAdmin":
+                for ques in data["updated"]:
+                    if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
+                       updated.append(ques)
+                for ques in data["added"]:
+                    added.append(ques)
+        except Exception as e:
+            print(e)
+        finally:
+            file.close()
+            return (updated,added)
+
 def createRequiredFiles(FILE):
     if FILE == './logs.json':
         if not path.exists(FILE) or stat(FILE).st_size==0:
