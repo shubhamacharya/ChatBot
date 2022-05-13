@@ -175,7 +175,7 @@ def unansweredWriteJSON(unanswered):
                 "superAdminId" :"",
                 "superAdminTimeStamp": ""
             })
-        print("Writing to the file 'unanswered.json'")
+        print("Writing to the file 'logs.json'")
         
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -215,6 +215,9 @@ def check_auth(email="",password="",role="",add=False):
             print("Error while adding new admin.",e)
         finally:
             file.close()
+
+def mailUser(unanswered_questions,userEmail):
+    FILE = "./mailUser.json"
 
 #ques = ["this is question 1","this is question 2","this is question 3","this is question 4"]
 #unansweredWriteJSON(ques)
