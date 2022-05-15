@@ -71,8 +71,6 @@ def logout():
 def predict():
     text = request.get_json().get("message")
     response,text = get_response(text)
-    if response == "I am unable to understand....":
-        unansweredWriteJSON(unanswered_question)
     message = {"answer":response}
     return jsonify(message)
 
@@ -310,6 +308,10 @@ def updatePassword():
 def fetchUserMail():
     param = request.get_json()
     print(param)
+
+    formattedQuestion = formatList(param["userQuestions"])
+    unansweredWriteJSON(formattedQuestion,param["userEmail"])
+
     res = make_response(jsonify({"message":"Thanks!! We will reach to you soon."}),200)
     return res
 if __name__ == "__main__":
