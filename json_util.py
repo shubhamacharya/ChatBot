@@ -152,7 +152,7 @@ def createRequiredFiles(FILE):
             finally:
                 file.close()
 
-def unansweredWriteJSON(unanswered):
+def unansweredWriteJSON(unanswered,email):
     '''
     1.Add all unanswered question to the file with any flag.
         Flag will set when the question is answered by admin.
@@ -173,7 +173,9 @@ def unansweredWriteJSON(unanswered):
                 "adminTimeStamp": "",
                 "superAdminApproval" : 0,
                 "superAdminId" :"",
-                "superAdminTimeStamp": ""
+                "superAdminTimeStamp": "",
+                "userEmail" : email,
+                "userMailStatus" : 0
             })
         print("Writing to the file 'logs.json'")
         
@@ -216,8 +218,11 @@ def check_auth(email="",password="",role="",add=False):
         finally:
             file.close()
 
-def mailUser(unanswered_questions,userEmail):
-    FILE = "./mailUser.json"
+def writeAnswerMail(mail=False):
+    if mail:
+        pass
+    else:
+        pass
 
 #ques = ["this is question 1","this is question 2","this is question 3","this is question 4"]
 #unansweredWriteJSON(ques)
