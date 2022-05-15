@@ -46,51 +46,70 @@ function firstBotMessage() {
 
 firstBotMessage();
 
-unanswered_question = ""
+let param = {"userEmail": "","userQuestions": ""}
 unanswered_count = 0
-userMail = ""
+questionFlag = false
 // Retrieves the response
-const getHardResponse = async (userText) => { 
+const getHardResponse = async (userText) => 
+{ 
   let botResponse = ""
- 
+  
   let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   botResponse = await getBotResponse(userText)
   if(unanswered_count == 2)
   {
-      botResponse = "Please provide your email"
+    if(param["userQuestions"] != "" && param["userEmail"] == "")
+    {
       if(userText.match(mailformat))
       {
-        userMail = userText
-        botResponse = "Please write your question."
-        if(userMail != "" && unanswered_question == "")
+        param["userEmail"] = userText
+        questionFlag = null
+        let res = ""
+        if(param["userEmail"] != "" && param["userQuestions"] != "")
         {
-          unanswered_question = userText
-          let res = await fetch('/api/fetchUserMail',{
-            method: 'POST',
-            body: JSON.stringify({userEmail: userMail,userQuestions: unanswered_question}),
-            headers:{
-                'Content-Type': 'application/json'
-            }
+          console.log("Sending POST Request.")
+          console.log("User Question : "+param["userQuestions"]+" User Mail : "+param["userEmail"])
+          res = await fetch('/api/fetchUserMail',{
+          method: 'POST',
+          body: JSON.stringify(param),
+          headers:{
+            'Content-Type': 'application/json'
+           }
           })
-      if(res.status == 200)
-      {
-        r = await res.json()
-        botResponse = r.message
-        unanswered_count = 0
-      }
         }
-       
+        if(res.status == 200)
+        {
+          r = await res.json()
+          botResponse = r.message
+          unanswered_count = 0
+          param["userQuestions"] = ""
+          param["userEmail"] = ""
+          botResponse = "Thanks We will reach you soon."
+        }
       }
-  }
+    }
 
+    if(questionFlag == true)
+    {
+      param["userQuestions"] = userText
+      botResponse = "Please provide your email"
+    }
+
+    if(questionFlag == false)
+    {
+      botResponse = "Please write your question."
+      questionFlag = true
+    }
+  }    
+    
   if(botResponse == "I am unable to understand....")
   {
     unanswered_count += 1
   }
-    console.log("Bot Response"+botResponse+"\t"+unanswered_question);
-    let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-    $("#chatbox").append(botHtml);
-    document.getElementById("chat-bar-bottom").scrollIntoView(true);
+  //console.log("Unanswered Ques "+unanswered_question+"\n"+" Question Flag "+questionFlag+"\n"+"Unanswered Cnt "+unanswered_question)
+  let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+  $("#chatbox").append(botHtml);
+  document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
 //Gets the text text from the input box and processes it
