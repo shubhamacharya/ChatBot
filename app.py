@@ -209,35 +209,43 @@ def fetchTag():
 @app.route("/api/updateQuestion",methods=['POST'])
 def updateQuestion():
     user = session['user']
-    req = request.get_json()
+    res = ""
     FILE = './logs.json'
-
-    print(req)
-    unformattedNewQuestion = req["pattern"]
-    unformattedNewAnswers = req["responses"]
-    unformattedOldQuestion = req["oldQuestion"]
-    unformattedOldAnswer = req["oldResponse"]
-    tag = req["tag"]
-
+    unformattedOldQuestion = request.form["oldQuestion"]
+    unformattedOldAnswer = request.form["oldResponse"]
+    unformattedNewQuestion = request.form["pattern"]
+    unformattedNewAnswers = request.form["responses"]
+    
+    tag = request.form["tag"]
+    operation = request.form["btnradio"]
+    
     patterns  = formatList(unformattedNewQuestion)
     response = formatList(unformattedNewAnswers)
     oldPattern = formatList(unformattedOldQuestion)
     oldResponse = formatList(unformattedOldAnswer)
 
+
     try:
         file = open(FILE,'r+')
         data = json.load(file)
-        #Call to add updated question
         if user['role'] == 'superAdmin':
-            data["updated"].append({
-                "oldQuestion" : oldPattern,
-                "newQuestion" : patterns,
-                "oldResponse" : oldResponse,
-                "newResponse" : response,
-                "tag" : tag,
-                "superAdminId" : user['email'],
-                "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")    
-            })
+            if updateQuestion(pattern,response,oldPattern,oldResponse,tag):
+                if operation == "Approved":
+                    for i in data['unanswered']:
+                        if question in list(i.keys())[0]:
+                                i['superAdminApproval'] = 1
+                                i['superAdminId'] = user['email'] 
+                                i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                else:
+                    data["updated"].append({
+                    "oldQuestion" : oldPattern,
+                    "newQuestion" : patterns,
+                    "oldResponse" : oldResponse,
+                    "newResponse" : response,
+                    "tag" : tag,
+                    "superAdminId" : user['email'],
+                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")   
+                    })
         else:
             data["updated"].append({
                 "oldQuestion" : oldPattern,
@@ -251,7 +259,6 @@ def updateQuestion():
                 "superAdminId" : "",
                 "superAdminTimeStamp" : ""    
             })
-
             file = open(FILE,"w+")
             file.seek(0)
             json.dump(data,file,indent=4)
@@ -261,7 +268,7 @@ def updateQuestion():
     except Exception as e:
         print(e)
     finally:
-        file.close()    
+        file.close()
         return res
 
 @app.route("/api/validate",methods=['POST'])
