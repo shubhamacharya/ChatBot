@@ -187,6 +187,20 @@ def unansweredWriteJSON(unanswered,email):
     finally:
         file.close()
 
+def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
+    FILE = './test.json'
+
+    file = open(FILE,'r+')
+    data = json.load(file)
+
+    for intent in data["intents"]:
+        if intent["tag"] == tag:
+            intent["patterns"][intent["patterns"].index(oldPattern)] = pattern
+            intent["responses"] = response
+
+    file.seek(0)
+    json.dump(data,file,indent=4)
+
 def check_auth(email="",password="",role="",add=False):
     '''
     Creates the default admin user if file does not exists.
