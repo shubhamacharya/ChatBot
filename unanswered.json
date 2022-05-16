@@ -1,5 +1,6 @@
 {
-    "question": [{
+    "question": [
+        {
             "this is question 1": 1,
             "response": "this is answer 1",
             "tag": "test",
@@ -8,10 +9,10 @@
             "superAdminId": "admin@gmail.com"
         },
         {
-            "this is question 2": 0,
-            "response": "",
+            "this is question 2": 1,
+            "response": "this is answer 2",
             "tag": "",
-            "adminId": "",
+            "adminId": "regadmin@gmail.com",
             "superAdminApproval": 0,
             "superAdminId": ""
         },
