@@ -267,15 +267,18 @@ body {
     margin-bottom: 10%;
     font-size: 20px;
    }
+
 .card-body{
     font-size: 20px;
 }
-.mb-3 .item:hover{
+
+.item:hover{
     /*outline: 0px solid transparent;*/
     border: 1px solid #0198fa;
     -webkit-transition: all 0.2s ease-in-out;
    /* transition: all 0.2s ease-in-out;*/
 }
+
 .me-3 .first:hover{
     border: 1px solid #0198fa;
     transition: all 0.2s ease-in-out;
@@ -288,6 +291,10 @@ body {
     border: 1px solid #0198fa;
 }
 
+.search_select_box_input{
+        margin-top: 20px;
+        margin-bottom: 20px;
+}
 /* Dropdown menu will open on hoverover */
 
 .dropdown:hover .dropdown-menu {

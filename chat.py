@@ -1,6 +1,7 @@
 import random
 import json
 import torch
+import re
 import subprocess
 
 from model import NeuralNet
@@ -35,7 +36,7 @@ except FileNotFoundError: #If there is no training file then call the train.py s
     subprocess.call("python3 ./train.py", shell=True)
 
 def get_response(msg):
-    unanswed_question = " "
+    unanswered_question = " "
 
     sentence = tokenize(msg)
     X = bag_of_words(sentence, all_words)
@@ -62,18 +63,30 @@ def get_response(msg):
                     return do_you_mean 
     """
     else:
-        unanswed_question = msg
+        unanswered_question = msg
         unable = "I am unable to understand...."
-        return [unable,unanswed_question]
+        return [unable,unanswered_question]
 
 
 if __name__ == "__main__":
     print("Let's chat! (type 'quit' to exit)")
+    unanswered_questions = []
+    unanswered_count = 0
     while True:
         sentence = input("You: ")
         if sentence == "quit":
             break
-
-        resp = get_response(sentence)
+    
+        if unanswered_count == 0:
+            resp = get_response(sentence)
+        if resp[0] == "I am unable to understand....":
+            unanswered_questions.append(sentence)
+            unanswered_count += 1
+        if unanswered_count == 2:
+            resp = "Please Provide Your Email: " 
+            mail_regex =  r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            if(re.fullmatch(mail_regex, sentence)):
+                resp = "We will contact you soon"
+                unanswered_count = 0
         print(resp)
 

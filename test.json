@@ -51,7 +51,30 @@
                 "this is question 2"
             ],
             "responses": [
-                "this is answer 1"
+                "this is answer 1",
+                "this is answer 2"
+            ]
+        },
+        {
+            "tag": "addTest",
+            "patterns": [
+                "this is add question 1",
+                "this is add question 2"
+            ],
+            "responses": [
+                "this is add answer common"
+            ]
+        },
+        {
+            "tag": "testing",
+            "patterns": [
+                "what is your name?",
+                "what are you ?",
+                "how can i help you?",
+                ""
+            ],
+            "responses": [
+                "yes i will help you"
             ]
         },
         {

@@ -9,6 +9,13 @@ def formatList(unformattedList):
     return list(map(lambda x : re.sub("\r","",x),tempList))
 
 def addQuestion(pattern,response,tag,switch=False):
+    '''
+    Variables :-
+
+        questionFlag = To Check if question already exists.
+        tagFlag = To Check if tag already exists.
+        index = Get index of tag if tag already exists.
+    '''
     questionFlag = False
     tagFlag = False
     index = -1
@@ -23,25 +30,25 @@ def addQuestion(pattern,response,tag,switch=False):
     if index != -1:
         tagFlag = True
         
-    if switch: 
+    if switch: #For unanswered Questions
         for i in range(len(data['intents'])):
             if pattern in data['intents'][i]['patterns']:
                 questionFlag = True
-                
-    pattern = formatList(pattern)
-    response = formatList(response)
+
+    if not isinstance(pattern, list):  #Check the type of the pattern and Response for list.       
+        pattern = formatList(pattern)
+    if not isinstance(response, list):
+        response = formatList(response)
 
     if tagFlag: # Append to the tag if tag is present 
         if questionFlag:
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
-            data['intents'][index]['responses'].extend(response)   
-            print(data,"\n\n") 
+            data['intents'][index]['responses'].extend(response)
     else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
-        print(data)
     try:
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -86,21 +93,23 @@ def getUnanswered(user):
     tag = []
     zip_ret = []
 
-    if path.exists("./unanswered.json"):
+    FILE = './logs.json'
+
+    if path.exists(FILE):
         try:
-            file = open("./unanswered.json","r+")
+            file = open(FILE,"r+")
             data = json.load(file)
             if user['role'] == 'superAdmin':
-                for ques in data['question']:
-                    if ques[list(ques)[0]] == 1 and ques['adminId'] != "":
+                for ques in data['unanswered']:
+                    if ques[list(ques)[0]] == 1 and ques['superAdminApproval'] != 1:
                         unansweredList.append(list(ques)[0])
                         adminInfo.append(ques['adminId'])
                         responses.append(ques['response'])
                         tag.append(ques['tag'])
-                zip_ret = list(zip(unansweredList,responses,adminInfo))
+                zip_ret = list(zip(unansweredList,responses,tag,adminInfo))
             
             else:
-                for ques in data['question']:
+                for ques in data['unanswered']:
                     if ques[list(ques)[0]] == 0 and ques['superAdminApproval'] == 0:
                         zip_ret.append(list(ques)[0])
 
@@ -110,40 +119,65 @@ def getUnanswered(user):
             file.close()
             return zip_ret
 
+def getApproval(user):
+    updated = []
+    added = []
+    FILE = './logs.json'
+    if path.exists(FILE):
+        try:
+            file = open(FILE,"r+")
+            data = json.load(file)
+
+            if user['role'] == "superAdmin":
+                for ques in data["updated"]:
+                    if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
+                       updated.append(ques)
+                for ques in data["added"]:
+                    added.append(ques)
+        except Exception as e:
+            print(e)
+        finally:
+            file.close()
+            return (updated,added)
+
 def createRequiredFiles(FILE):
-    if FILE == './unanswered.json':
+    if FILE == './logs.json':
         if not path.exists(FILE) or stat(FILE).st_size==0:
             print(f"Creating File {FILE}.")
             try:
                 file = open(FILE,"w+")
-                json.dump({"question":[]},file)
+                json.dump({"unanswered":[],"added":[],"updated":[]},file)
             except Exception as e:
                 print(f"Error while creating {FILE}.",e)
             finally:
                 file.close()
 
-def unansweredWriteJSON(unanswered):
+def unansweredWriteJSON(unanswered,email):
     '''
     1.Add all unanswered question to the file with any flag.
         Flag will set when the question is answered by admin.
     2. Call addQuestion method to add or append the questions.
     3. Remove all the questions from file whoes flag is set.
     '''
-    FILE = './unanswered.json'
+    FILE = './logs.json'
     createRequiredFiles(FILE)
     try:
         file = open(FILE,"r+")
         data = json.load(file)
         for i in range(len(unanswered)):
-            data['question'].append({    
+            data['unanswered'].append({    
                 unanswered[i]:0,
                 "response":"",
                 "tag":"",
                 "adminId" : "",
+                "adminTimeStamp": "",
                 "superAdminApproval" : 0,
-                "superAdminId" :""
+                "superAdminId" :"",
+                "superAdminTimeStamp": "",
+                "userEmail" : email,
+                "userMailStatus" : 0
             })
-        print("Writing to the file 'unanswered.json'")
+        print("Writing to the file 'logs.json'")
         
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -152,6 +186,20 @@ def unansweredWriteJSON(unanswered):
         print(f"Error while writing to the {FILE}.",e)
     finally:
         file.close()
+
+def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
+    FILE = './test.json'
+
+    file = open(FILE,'r+')
+    data = json.load(file)
+
+    for intent in data["intents"]:
+        if intent["tag"] == tag:
+            intent["patterns"][intent["patterns"].index(oldPattern)] = pattern
+            intent["responses"] = response
+
+    file.seek(0)
+    json.dump(data,file,indent=4)
 
 def check_auth(email="",password="",role="",add=False):
     '''
@@ -184,3 +232,11 @@ def check_auth(email="",password="",role="",add=False):
         finally:
             file.close()
 
+def writeAnswerMail(mail=False):
+    if mail:
+        pass
+    else:
+        pass
+
+#ques = ["this is question 1","this is question 2","this is question 3","this is question 4"]
+#unansweredWriteJSON(ques)
