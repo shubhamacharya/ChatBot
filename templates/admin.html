@@ -189,12 +189,29 @@
                                     <div class="accordion-item">
                                       <h2 class="accordion-header" id="flush-heading{{i}}">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
-                                          {{updated[i]["newQuestion"][0]}}
+                                          {{updated[i]["newQuestion"][0]}}                          {{updated[i]["newResponse"]}}
                                         </button>
                                       </h2>
                                       <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
-                                        <h2>{{i}}</h2>
-                                      </div>
+                                       <form action='/api/updateQuestion' method='POST'>
+                                          <td> {{i+1}}.</td>
+                                          <td> <input readonly value="{{updated[i]["oldQuestion"][0]}}" name="oldQuestion"></td>
+                                          <td> <input type="textarea" readonly value="{{updated[i]["oldResponse"]}}" name="oldResponse"></td>
+                                          <td> <input readonly value="{{updated[i]["tag"]}}" name="tag"></td>
+                                          <td> {{updated[i]["adminId"]}}</td>
+                                          <td>
+                                             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                <input type="radio" class="btn-check" name="btnradio" value="Approved" id="updateBtnRadio1" autocomplete="off">
+                                                <label class="btn btn-outline-primary" for="updateBtnRadio1">Approve</label>
+                                                <input type="radio" class="btn-check" name="btnradio" value="Declined" id="updateBtnRadio2" autocomplete="off">
+                                                <label class="btn btn-outline-primary" for="updateBtnRadio2">Declined</label>
+                                             </div>
+                                          </td>
+                                          <input hidden value="{{updated[i]["newQuestion"][0]}}" name="pattern">
+                                          <input hidden value="{{updated[i]["newResponse"][0]}}" name="responses">
+                                          <td><button type="submit" name="submit">Send</button></td>
+                                       </form>
+                                       </div>
                                     </div>
                                   </div>
                               {% endfor %}
