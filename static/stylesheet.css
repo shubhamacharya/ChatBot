@@ -6,8 +6,7 @@ html {
 
 body {
     margin: 0 auto;
-    
-    }
+}
 
 .chat-bar-collapsible {
     position: fixed;
@@ -65,7 +64,7 @@ body {
 }
 
 .chat-container::-webkit-scrollbar {
-    display:none;
+    display: none;
 }
 
 .chat-bar-input-block {
@@ -78,7 +77,6 @@ body {
     /*background-color: rgb(235, 235, 235);*/
     background-image: linear-gradient(to bottom right, rgb(16, 38, 99), rgb(48, 138, 240));
     border-radius: 10px 10px 0px 0px;
-
     padding: 10px 0px 10px 10px;
 }
 
@@ -195,25 +193,20 @@ body {
 .split-left {
     float: left;
     width: 10%;
-  
 }
 
 .split-right {
     float: left;
     width: 80%;
     margin-left: 10px;
-    
 }
 
 .d-flex {
     margin-top: 20px;
-  
-    
 }
 
 .nav-link {
     margin-bottom: 20px;
-   
 }
 
 .box {
@@ -225,7 +218,6 @@ body {
     background-color: #eee;
     border-radius: 5px;
     box-shadow: 4px 4px #ccc;
-    
 }
 
 .navbar {
@@ -252,11 +244,10 @@ body {
 }
 
 .hidden-btn {
-    background:transparent;
+    background: transparent;
     border: none !important;
     font-size: 18px;
     margin-bottom: 1px;
-
 }
 
 .register-card {
@@ -266,47 +257,51 @@ body {
     margin-right: 45%;
     margin-bottom: 10%;
     font-size: 20px;
-   }
+}
 
-.card-body{
+.card-body {
     font-size: 20px;
 }
 
-.item:hover{
+.item:hover {
     /*outline: 0px solid transparent;*/
     border: 1px solid #0198fa;
     -webkit-transition: all 0.2s ease-in-out;
-   /* transition: all 0.2s ease-in-out;*/
+    /* transition: all 0.2s ease-in-out;*/
 }
 
-.me-3 .first:hover{
+.me-3 .first:hover {
     border: 1px solid #0198fa;
     transition: all 0.2s ease-in-out;
-    }
+}
+
 .register-btn {
     float: center
-   }
+}
 
-.first:hover{
+.first:hover {
     border: 1px solid #0198fa;
 }
 
-.search_select_box_input{
-        margin-top: 20px;
-        margin-bottom: 20px;
+.search_select_box_input {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+
+
 /* Dropdown menu will open on hoverover */
 
 .dropdown:hover .dropdown-menu {
     display: block;
 }
 
+
 /* Changes the color of the dropdown button on hover */
 
 .dropdown-toggle {
-    background:transparent;
+    background: transparent;
     font-size: 20px;
-   }
+}
 
 .dropdown {
     margin-top: 15px;
@@ -324,16 +319,21 @@ body {
 .sign_header {
     color: blue;
 }
-.submit{
+
+.submit {
     /*padding-top: 20px;*/
     margin-top: 20px;
     font-size: 20px;
-    
 }
-.submit:hover{
+
+.submit:hover {
     outline: 0px solid transparent;
     border: 1px solid #eaeef0;
     -webkit-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
 }
 
+.span_500 {
+    display: inline-block;
+    margin-left: 5px;
+}
