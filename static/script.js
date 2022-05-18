@@ -2,7 +2,7 @@
 var coll = document.getElementsByClassName("collapsible");
 
 for (let i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function () {
+    coll[i].addEventListener("click", function() {
         this.classList.toggle("active");
 
         var content = this.nextElementSibling;
@@ -46,70 +46,61 @@ function firstBotMessage() {
 
 firstBotMessage();
 
-let param = {"userEmail": "","userQuestions": ""}
+let param = { "userEmail": "", "userQuestions": "" }
 unanswered_count = 0
 questionFlag = false
-// Retrieves the response
-const getHardResponse = async (userText) => 
-{ 
-  let botResponse = ""
-  
-  let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  botResponse = await getBotResponse(userText)
-  if(unanswered_count == 2)
-  {
-    if(param["userQuestions"] != "" && param["userEmail"] == "")
-    {
-      if(userText.match(mailformat))
-      {
-        param["userEmail"] = userText
-        questionFlag = null
-        let res = ""
-        if(param["userEmail"] != "" && param["userQuestions"] != "")
-        {
-          console.log("Sending POST Request.")
-          console.log("User Question : "+param["userQuestions"]+" User Mail : "+param["userEmail"])
-          res = await fetch('/api/fetchUserMail',{
-          method: 'POST',
-          body: JSON.stringify(param),
-          headers:{
-            'Content-Type': 'application/json'
-           }
-          })
+    // Retrieves the response
+const getHardResponse = async(userText) => {
+    let botResponse = ""
+
+    let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    botResponse = await getBotResponse(userText)
+    if (unanswered_count == 2) {
+        if (param["userQuestions"] != "" && param["userEmail"] == "") {
+            if (userText.match(mailformat)) {
+                param["userEmail"] = userText
+                questionFlag = null
+                let res = ""
+                if (param["userEmail"] != "" && param["userQuestions"] != "") {
+                    console.log("Sending POST Request.")
+                    console.log("User Question : " + param["userQuestions"] + " User Mail : " + param["userEmail"])
+                    res = await fetch('/api/fetchUserMail', {
+                        method: 'POST',
+                        body: JSON.stringify(param),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                }
+                if (res.status == 200) {
+                    r = await res.json()
+                    botResponse = r.message
+                    unanswered_count = 0
+                    param["userQuestions"] = ""
+                    param["userEmail"] = ""
+                    botResponse = "Thanks We will reach you soon."
+                }
+            }
         }
-        if(res.status == 200)
-        {
-          r = await res.json()
-          botResponse = r.message
-          unanswered_count = 0
-          param["userQuestions"] = ""
-          param["userEmail"] = ""
-          botResponse = "Thanks We will reach you soon."
+
+        if (questionFlag == true) {
+            param["userQuestions"] = userText
+            botResponse = "Please provide your email"
         }
-      }
+
+        if (questionFlag == false) {
+            botResponse = "Please write your question."
+            questionFlag = true
+        }
     }
 
-    if(questionFlag == true)
-    {
-      param["userQuestions"] = userText
-      botResponse = "Please provide your email"
+    if (botResponse == "I am unable to understand....") {
+        unanswered_count += 1
     }
-
-    if(questionFlag == false)
-    {
-      botResponse = "Please write your question."
-      questionFlag = true
-    }
-  }    
-    
-  if(botResponse == "I am unable to understand....")
-  {
-    unanswered_count += 1
-  }
-  //console.log("Unanswered Ques "+unanswered_question+"\n"+" Question Flag "+questionFlag+"\n"+"Unanswered Cnt "+unanswered_question)
-  let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-  $("#chatbox").append(botHtml);
-  document.getElementById("chat-bar-bottom").scrollIntoView(true);
+    //console.log("Unanswered Ques "+unanswered_question+"\n"+" Question Flag "+questionFlag+"\n"+"Unanswered Cnt "+unanswered_question)
+    let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+    $("#chatbox").append(botHtml);
+    document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
 //Gets the text text from the input box and processes it
@@ -155,195 +146,178 @@ function heartButton() {
 }
 
 // Press enter to send a message
-$("#textInput").keypress(function (e) {
+$("#textInput").keypress(function(e) {
     if (e.which == 13) {
         getResponse();
     }
 });
 
 const getBotResponse = async(input) => {
-    try{
-    let res = await fetch("http://127.0.0.1:5000/" + '/predict',{
+    try {
+        let res = await fetch("http://127.0.0.1:5000/" + '/predict', {
             method: 'POST',
-            body: JSON.stringify({message: input}),
+            body: JSON.stringify({ message: input }),
             mode: 'cors',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             },
         });
-    let r = await res.json();
-            return r.answer
+        let r = await res.json();
+        return r.answer
+    } catch (error) {
+        console.error('Error:', error);
     }
-    catch(error) { 
-            console.error('Error:',error);
-        }
 }
 
-async function changePasswd() 
-{
-	//Takes Current Password from user and validates with database.
-  //Sets isConfirmed on successfull validation.
-  const validationRes = await Swal.fire({
-		title: 'Validate Password',
-		input: 'password',
-		inputAttributes: {
-			autocapitalize: 'off'
-		},
-		showCancelButton: true,
-		confirmButtonText: 'Validate',
-		showLoaderOnConfirm: true,
-		preConfirm: (password) => {
-			return fetch('/api/validate', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(password)
-				}).then(response => {
-					if (response.status != 200) {
-						throw new Error(response.message)
-					}
-					return response.json()
-				})
-				.catch(error => {
-					Swal.showValidationMessage(
-						`Please Enter the Correct Password: ${error}`
-					)
-				})
-		},
-		allowOutsideClick: () => !Swal.isLoading()
-	})
- if(validationRes.isConfirmed)
- {
-   //If validation is successfull, asks user for new password
-   var passwords 
-   await Swal.fire({
-    title: 'Change Password',
-    html: '<input type="password" id="swal-input1" class="swal2-input" placeholder="New Password">' +
-      '<input type="password" id="swal-input2" class="swal2-input" placeholder="Retype Password">',
-    inputAttributes: {
-      autocapitalize: 'off'
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Change Password',
-    showLoaderOnConfirm: true,
-    preConfirm: function() {
-      return new Promise(function(resolve) {
-        resolve([
-          $('#swal-input1').val(),
-          $('#swal-input2').val()
-        ])
-      }).then(response => {
-        if(response[0]!=response[1])
-        {
-          throw new Error("Password Not Matching.")
-        }
-        passwords = response
-        
-      }).catch(error => {
-        Swal.showValidationMessage(`Password Not Matching.`)
-      })
-    },
-    allowOutsideClick: () => !Swal.isLoading()
-  })
-
-  let change = await fetch('/api/updatePassword', 
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(passwords[0])
-  }).then(final_response => {
-    if(final_response.status != 200)
-    {
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Error While Changing Password',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    }
-    return final_response.json()
-  }).catch(error => {
-    console.log(error.message)
-  })
-
-  if(change.message)
-  {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: change.message,
-      showConfirmButton: false,
-      timer: 1500
+async function changePasswd() {
+    //Takes Current Password from user and validates with database.
+    //Sets isConfirmed on successfull validation.
+    const validationRes = await Swal.fire({
+        title: 'Validate Password',
+        input: 'password',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Validate',
+        showLoaderOnConfirm: true,
+        preConfirm: (password) => {
+            return fetch('/api/validate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(password)
+                }).then(response => {
+                    if (response.status != 200) {
+                        throw new Error(response.message)
+                    }
+                    return response.json()
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                        `Please Enter the Correct Password: ${error}`
+                    )
+                })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
     })
-  }
+    if (validationRes.isConfirmed) {
+        //If validation is successfull, asks user for new password
+        var passwords
+        await Swal.fire({
+            title: 'Change Password',
+            html: '<input type="password" id="swal-input1" class="swal2-input" placeholder="New Password">' +
+                '<input type="password" id="swal-input2" class="swal2-input" placeholder="Retype Password">',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Change Password',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                return new Promise(function(resolve) {
+                    resolve([
+                        $('#swal-input1').val(),
+                        $('#swal-input2').val()
+                    ])
+                }).then(response => {
+                    if (response[0] != response[1]) {
+                        throw new Error("Password Not Matching.")
+                    }
+                    passwords = response
 
-  }	
+                }).catch(error => {
+                    Swal.showValidationMessage(`Password Not Matching.`)
+                })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
+
+        let change = await fetch('/api/updatePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(passwords[0])
+        }).then(final_response => {
+            if (final_response.status != 200) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error While Changing Password',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+            return final_response.json()
+        }).catch(error => {
+            console.log(error.message)
+        })
+
+        if (change.message) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: change.message,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+
+    }
 }
 
 question = ""
 var combineResponse
 
-async function getEdit()
-{
-  question = document.getElementById('datalistOptionsInput').value
-  document.getElementById('editableQuestion').value = question
-  var array = new Array()
-  for(var res in response)
-  {
-    array.push(response[res])
-  }
-  combineResponse = array.join('\n')
-  document.getElementById('responsesTextarea').value = combineResponse
+async function getEdit() {
+    question = document.getElementById('datalistOptionsInput').value
+    document.getElementById('editableQuestion').value = question
+    var array = new Array()
+    for (var res in response) {
+        array.push(response[res])
+    }
+    combineResponse = array.join('\n')
+    document.getElementById('responsesTextarea').value = combineResponse
 }
 
-async function updateQuestion()
-{
+async function updateQuestion() {
     let updatedQuestion = ""
     let updatedResponses = ""
-   
+
     let tag = document.getElementById('searchTag').value
 
-    if(questionChange)
-    {
+    if (questionChange) {
         updatedQuestion = document.getElementById("editableQuestion").value
     }
 
-    if(responseChange)
-    {
-      updatedResponses = document.getElementById("responsesTextarea").value
+    if (responseChange) {
+        updatedResponses = document.getElementById("responsesTextarea").value
     }
 
-    updatedJSON = {"oldQuestion":question,"pattern":updatedQuestion,"oldResponse":combineResponse,"responses":updatedResponses,"tag":tag}
+    updatedJSON = { "oldQuestion": question, "pattern": updatedQuestion, "oldResponse": combineResponse, "responses": updatedResponses, "tag": tag }
 
     const options = {
-                    method:'POST',
-                    headers: 
-                    {
-                      'Content-Type': 'application/json'
-                    },
-                    body:JSON.stringify(updatedJSON)
-                  }
-    let response = await fetch("/api/updateQuestion",options)
-    if(response.status != 200)
-    {
-      console.log(response.status)
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedJSON)
+    }
+    let response = await fetch("/api/updateQuestion", options)
+    if (response.status != 200) {
+        console.log(response.status)
     }
 
     let res = await response.json()
-    if(res.message)
-  {
-    Swal.fire({
-      position: 'top-right',
-      icon: 'success',
-      title: res.message,
-      showConfirmButton: false,
-      timer: 1500
-    })
-  }
+    if (res.message) {
+        Swal.fire({
+            position: 'top-right',
+            icon: 'success',
+            title: res.message,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
 }
-   
-  
