@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Flask,session,redirect,render_template,request,jsonify,url_for,flash,make_response
 from flask_cors import CORS
 from datetime import datetime
@@ -52,11 +53,9 @@ def login():
             if rec['status'] == 'active':
                 if not user or not check_password_hash(user['password'],password):
                     flash("Invalid Username or Password.")
-                    print("Invalid Username or Password.")
                     redirect(url_for('login'))
                 else:
                     session['user'] = user
-                    print("Login Success")
                     return redirect(url_for('admin_get'))
             else:
                 flash("User is not active.")
@@ -86,7 +85,6 @@ def admin_get():
             updated_cnt = len(updated_ques)
             added_cnt = len(added_ques)
             count = len(unanswered_question)
-            print(unanswered_question)
         except Exception as e:
             print(e)
         return render_template("admin.html",user=user,tags=tags,updated=updated_ques,up_cnt=updated_cnt,added=added_ques,add_cnt=added_cnt,unanswered=unanswered_question,count=count)
@@ -98,25 +96,36 @@ def addQuestion_post():
     user = session['user']
     FILE = "./logs.json"
 
-    unformattedPatterns = request.form["questions"]
-    pattern = formatList(unformattedPatterns)
+    pattern = request.form["questions"]
+    responses = request.form["answer"]
 
-    unformattedResponses = request.form["answer"]
-    responses = formatList(unformattedResponses)
-    tag = request.form["newTag"]
-    
+    tag = request.form["tags"]
+    if tag == "nota":
+        tag = request.form["newTag"]
+
+    try: 
+        operation = request.form["addBtnradio"]
+    except KeyError:
+        pass
     try:
         file = open(FILE,"r+")
         data = json.load(file)
         if user['role'] == "superAdmin":
             if addQuestion(pattern,responses,tag):
-                data["added"].append({
-                    "questions" : pattern,
-                    "response" : responses,
-                    "tag" : tag,
-                    "superAdminId" : user['email'],
-                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                })
+                if operation == "Approved":
+                    for i in data["added"]:
+                        if list(pattern).sort() == (list(i.values())[0]).sort():
+                            i["superAdminId"] = user['email']
+                            i["superAdminApproval"] = 1
+                            i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                else:
+                   data["added"].append({
+                        "questions" : pattern,
+                        "response" : responses,
+                        "tag" : tag,
+                        "superAdminId" : user['email'],
+                        "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                    }) 
         else:
             data["added"].append({
                 "questions" : pattern,
@@ -207,35 +216,38 @@ def fetchTag():
     return opt
 
 @app.route("/api/updateQuestion",methods=['POST'])
-def updateQuestion():
+def update():
     user = session['user']
     res = ""
     FILE = './logs.json'
-    unformattedOldQuestion = request.form["oldQuestion"]
+
+    oldPattern = request.form["oldQuestion"]
     unformattedOldAnswer = request.form["oldResponse"]
-    unformattedNewQuestion = request.form["pattern"]
+    unformattedPatterns = request.form["pattern"]
     unformattedNewAnswers = request.form["responses"]
     
     tag = request.form["tag"]
     operation = request.form["btnradio"]
-    
-    patterns  = formatList(unformattedNewQuestion)
+    patterns = formatList(unformattedPatterns)
     response = formatList(unformattedNewAnswers)
-    oldPattern = formatList(unformattedOldQuestion)
     oldResponse = formatList(unformattedOldAnswer)
-
 
     try:
         file = open(FILE,'r+')
         data = json.load(file)
         if user['role'] == 'superAdmin':
-            if updateQuestion(pattern,response,oldPattern,oldResponse,tag):
+            if updateQuestion(patterns,response,oldPattern,oldResponse,tag):
                 if operation == "Approved":
-                    for i in data['unanswered']:
-                        if question in list(i.keys())[0]:
+                    for i in data['updated']:
+                        if i["tag"] == tag:
+                            if patterns.sort() == i["newQuestion"].sort():
                                 i['superAdminApproval'] = 1
                                 i['superAdminId'] = user['email'] 
                                 i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+
+                                file = open(FILE,"w+")
+                                file.seek(0)
+                                json.dump(data,file,indent=4)
                 else:
                     data["updated"].append({
                     "oldQuestion" : oldPattern,
@@ -259,9 +271,11 @@ def updateQuestion():
                 "superAdminId" : "",
                 "superAdminTimeStamp" : ""    
             })
+
             file = open(FILE,"w+")
             file.seek(0)
             json.dump(data,file,indent=4)
+
             res = make_response(jsonify({"message":"Updated Question Successfully"}),200)
             flash("Question Updated Successfully...")
             print("Question Updated Successfully...")
@@ -269,7 +283,7 @@ def updateQuestion():
         print(e)
     finally:
         file.close()
-        return res
+        return redirect(url_for('admin_get'))
 
 @app.route("/api/validate",methods=['POST'])
 def validateUser():
@@ -321,5 +335,6 @@ def fetchUserMail():
 
     res = make_response(jsonify({"message":"Thanks!! We will reach to you soon."}),200)
     return res
+
 if __name__ == "__main__":
     app.run(debug=True)
