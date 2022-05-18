@@ -22,10 +22,17 @@ def addQuestion(pattern,response,tag,switch=False):
     try:
         file = open("./test.json","r+")
         data = json.load(file)
+
         tags = getTagList()
         index = tags.index(tag)
+        
     except ValueError:
         tagFlag = False
+
+    if not isinstance(pattern, list):  #Check the type of the pattern and Response for list.       
+        pattern = formatList(pattern)
+    if not isinstance(response, list):
+        response = formatList(response)
 
     if index != -1:
         tagFlag = True
@@ -35,13 +42,8 @@ def addQuestion(pattern,response,tag,switch=False):
             if pattern in data['intents'][i]['patterns']:
                 questionFlag = True
 
-    if not isinstance(pattern, list):  #Check the type of the pattern and Response for list.       
-        pattern = formatList(pattern)
-    if not isinstance(response, list):
-        response = formatList(response)
-
     if tagFlag: # Append to the tag if tag is present 
-        if questionFlag:
+        if questionFlag: #Checks if question is already present
             pass
         else:
             data['intents'][index]['patterns'].extend(pattern)
@@ -49,6 +51,7 @@ def addQuestion(pattern,response,tag,switch=False):
     else: #If tag not present in json file create new object
         entry = {"tag":tag,"patterns":pattern,"responses":response}
         data['intents'].append(entry)
+    
     try:
         file.seek(0)
         json.dump(data,file,indent=4)
@@ -133,7 +136,8 @@ def getApproval(user):
                     if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
                        updated.append(ques)
                 for ques in data["added"]:
-                    added.append(ques)
+                    if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
+                        added.append(ques)
         except Exception as e:
             print(e)
         finally:
@@ -190,16 +194,23 @@ def unansweredWriteJSON(unanswered,email):
 def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
     FILE = './test.json'
 
-    file = open(FILE,'r+')
-    data = json.load(file)
+    try:
+        file = open(FILE,'r+')
+        data = json.load(file)
 
-    for intent in data["intents"]:
-        if intent["tag"] == tag:
-            intent["patterns"][intent["patterns"].index(oldPattern)] = pattern
-            intent["responses"] = response
+        for intent in data["intents"]:
+            if intent["tag"] == tag:
+                index = intent["patterns"].index(oldPattern)
+                intent["patterns"][index] = "".join(pattern) #[intent["patterns"].index(oldPattern)])#
+                intent["responses"] = response
 
-    file.seek(0)
-    json.dump(data,file,indent=4)
+        file.seek(0)
+        json.dump(data,file,indent=4)
+    except Exception as e:
+        print(e)
+    finally:
+        file.close()
+        return True
 
 def check_auth(email="",password="",role="",add=False):
     '''
