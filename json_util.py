@@ -104,7 +104,7 @@ def getUnanswered(user):
             data = json.load(file)
             if user['role'] == 'superAdmin':
                 for ques in data['unanswered']:
-                    if ques[list(ques)[0]] == 1 and ques['superAdminApproval'] != 1:
+                    if ques[list(ques)[0]] == 1 and ques['superAdminApproval'] not in [1,-1]:
                         unansweredList.append(list(ques)[0])
                         adminInfo.append(ques['adminId'])
                         responses.append(ques['response'])
@@ -133,7 +133,7 @@ def getApproval(user):
 
             if user['role'] == "superAdmin":
                 for ques in data["updated"]:
-                    if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
+                    if ques['superAdminApproval'] not in [1,-1] and ques['adminId'] != "":
                        updated.append(ques)
                 for ques in data["added"]:
                     if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
