@@ -111,21 +111,27 @@ def addQuestion_post():
         file = open(FILE,"r+")
         data = json.load(file)
         if user['role'] == "superAdmin":
-            if addQuestion(pattern,responses,tag):
-                if operation == "Approved":
+            if operation == "Approved":
+                if addQuestion(pattern,responses,tag):
                     for i in data["added"]:
                         if list(pattern).sort() == (list(i.values())[0]).sort():
                             i["superAdminId"] = user['email']
                             i["superAdminApproval"] = 1
                             i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                else:
-                   data["added"].append({
-                        "questions" : pattern,
-                        "response" : responses,
-                        "tag" : tag,
-                        "superAdminId" : user['email'],
-                        "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                    }) 
+            elif operation == "Declined":
+                for i in data["added"]:
+                    if list(pattern).sort() == (list(i.values())[0]).sort():
+                        i["superAdminId"] = user['email']
+                        i["superAdminApproval"] = -1
+                        i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+            else:
+               data["added"].append({
+                    "questions" : pattern,
+                    "response" : responses,
+                    "tag" : tag,
+                    "superAdminId" : user['email'],
+                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                }) 
         else:
             data["added"].append({
                 "questions" : pattern,
@@ -171,21 +177,26 @@ def unanswered_post():
         data = json.load(file)
 
         if user['role'] == 'superAdmin':
-            if addQuestion(question,unformattedResponse,tag,switch=True):
-                for i in data['unanswered']:
-                    if question in list(i.keys())[0]:
-                        if approval == "Approved":
-                            i['superAdminApproval'] = 1
-                            i['superAdminId'] = user['email'] 
-                            i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                        else:
-                            i["response"] = unformattedResponse
-                            i['superAdminApproval'] = ""
-                            i["tag"] = tag
-                            i["superAdminId"] = user['email']
-                            i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+            if approval != "Declined":
+                if addQuestion(question,unformattedResponse,tag,switch=True):
+                   for i in data['unanswered']:
+                       if question in list(i.keys())[0]:
+                           if approval == "Approved":
+                               i['superAdminApproval'] = 1
+                               i['superAdminId'] = user['email'] 
+                               i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                           else:
+                               i["response"] = unformattedResponse
+                               i['superAdminApproval'] = ""
+                               i["tag"] = tag
+                               i["superAdminId"] = user['email']
+                               i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                else:
+                    flash("Question not added.")
             else:
-                flash("Question not added.")
+                i['superAdminApproval'] = -1
+                i['superAdminId'] = user['email'] 
+                i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
         else: #For Normal Admins
             for i in data['unanswered']:
                 if question in list(i.keys())[0]:
@@ -236,28 +247,40 @@ def update():
         file = open(FILE,'r+')
         data = json.load(file)
         if user['role'] == 'superAdmin':
-            if updateQuestion(patterns,response,oldPattern,oldResponse,tag):
-                if operation == "Approved":
-                    for i in data['updated']:
-                        if i["tag"] == tag:
-                            if patterns.sort() == i["newQuestion"].sort():
-                                i['superAdminApproval'] = 1
-                                i['superAdminId'] = user['email'] 
-                                i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+            if operation != "Declined": 
+                if updateQuestion(patterns,response,oldPattern,oldResponse,tag):
+                    if operation == "Approved":
+                        for i in data['updated']:
+                            if i["tag"] == tag:
+                                if patterns.sort() == i["newQuestion"].sort():
+                                    i['superAdminApproval'] = 1
+                                    i['superAdminId'] = user['email'] 
+                                    i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
 
-                                file = open(FILE,"w+")
-                                file.seek(0)
-                                json.dump(data,file,indent=4)
-                else:
-                    data["updated"].append({
-                    "oldQuestion" : oldPattern,
-                    "newQuestion" : patterns,
-                    "oldResponse" : oldResponse,
-                    "newResponse" : response,
-                    "tag" : tag,
-                    "superAdminId" : user['email'],
-                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")   
-                    })
+                                    file = open(FILE,"w+")
+                                    file.seek(0)
+                                    json.dump(data,file,indent=4)
+                    else:
+                        data["updated"].append({
+                        "oldQuestion" : oldPattern,
+                        "newQuestion" : patterns,
+                        "oldResponse" : oldResponse,
+                        "newResponse" : response,
+                        "tag" : tag,
+                        "superAdminId" : user['email'],
+                        "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")   
+                        })
+            else:
+                for i in data['updated']:
+                            if i["tag"] == tag:
+                                if patterns.sort() == i["newQuestion"].sort():
+                                    i['superAdminApproval'] = -1
+                                    i['superAdminId'] = user['email'] 
+                                    i['superAdminTimeStamp'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+
+                                    file = open(FILE,"w+")
+                                    file.seek(0)
+                                    json.dump(data,file,indent=4)
         else:
             data["updated"].append({
                 "oldQuestion" : oldPattern,
