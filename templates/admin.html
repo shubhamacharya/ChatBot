@@ -84,25 +84,44 @@
                            Add New Tag:
                            <input class="form-control" name="newTag" id="newTag" type="text" placeholder="Enter New Tag Here.">
                         </div>
-                        <script type="text/javascript">
-                           //Shows the Add New Tag if Not Present Option is Selected.
-                           $("#tags").on('change',function () {
-                             if(this.value == 'nota')
-                             {
-                               $('#addNewTag').show();
-                             }
-                             else
-                             {
-                               $('#addNewTag').hide();
-                             }
-                           });
-                        </script>
                         <div class="text-center">
-                           <button class="btn btn-primary btn-lg submit" type="submit" name="submit" value="submit">Submit</button>
+                           <button class="btn btn-primary btn-lg submit" type="submit" id="addQuestionBtn" name="submit" value="submit">Submit</button>
                         </div>
                      </div>
                   </div>
                </form>
+               <script type="text/javascript">
+                  //Shows the Add New Tag if Not Present Option is Selected.
+                  $("#tags").on('change',function () {
+                    if(this.value == 'nota')
+                    {
+                      $('#addNewTag').show();
+                    }
+                    else
+                    {
+                      $('#addNewTag').hide();
+                    }
+                  });
+
+                  $("#addQuestionBtn").on("click",function () {
+                        setTimeout(() => {  console.log("World!"); }, 5000);
+                        var question = document.getElementById("addQuestions").value
+                        var answer = document.getElementById("addQuestionAnswer").value
+                        var tag = document.getElementById("tags").value
+                        var newTag = document.getElementById("newTag").value
+
+                        if(question != "" && answer!= "" && tag != "" || newTag != "")
+                        {
+                           Swal.fire({
+                              position: 'top-end',
+                              icon: 'success',
+                              title: 'Question Added Successfully...',
+                              showConfirmButton: false,
+                              timer: 1500
+                           })
+                        }
+                  })
+               </script>
             </div>
             <!--Add Question to chatbot END-->
             {% if user['role'] == 'superAdmin'%}
@@ -148,35 +167,59 @@
                                           <td> <input readonly value="{{added[i]["tag"]}}" name="tags"></td>
                                           <td> {{added[i]["adminId"]}}</td>
                                           <td>
-                                             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                             <div class="btn-group"  role="group" aria-label="Basic radio toggle button group">
                                                 <input type="radio" class="btn-check" name="addBtnradio" value="Approved" id="addBtnradio1" autocomplete="off">
                                                 <label class="btn btn-outline-primary" for="addBtnradio1">Approve</label>
                                                 <input type="radio" class="btn-check" name="addBtnradio" value="Declined" id="addBtnradio2" autocomplete="off">
                                                 <label class="btn btn-outline-primary" for="addBtnradio2">Declined</label>
                                              </div>
                                           </td>
-                                          <td><button type="submit" name="submit">Send</button></td>
+                                          <td><button type="submit" id="approveAddedQuestionBtn" name="submit">Send</button></td>
                                        </form>
-                                       <script>
-                                          var test = '{{added[i]["questions"]}}'
-                                          var test2 = '{{added[i]["response"]}}'
-                                          
-                                          let ques = test.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
-                                          let ans = test2.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
-
-                                          let quesArr = ques.split(",")
-                                          let answerArr = ans.split(",")
-
-                                          let combinedQuestion = quesArr.join("\n")
-                                          let combinedAnswere = answerArr.join("\n")
-                                       
-                                          document.getElementById("approveAddedQuestion").innerHTML = combinedQuestion;
-                                          
-                                          document.getElementById("approveAddedAnswer").value   = combinedAnswere;
-                                       </script>
                                     </tr>
                                  </table>
                                 </div>
+                                 <script>
+                                    var test = '{{added[i]["questions"]}}'
+                                    var test2 = '{{added[i]["response"]}}'
+
+                                    let ques = test.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
+                                    let ans = test2.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
+
+                                    let quesArr = ques.split(",")
+                                    let answerArr = ans.split(",")
+
+                                    let combinedQuestion = quesArr.join("\n")
+                                    let combinedAnswere = answerArr.join("\n")
+                                    
+                                    document.getElementById("approveAddedQuestion").value = combinedQuestion;
+
+                                    document.getElementById("approveAddedAnswer").value   = combinedAnswere;
+
+                                    
+                                    $("#approveAddedQuestionBtn").on("click", function ()
+                                    {
+                                       var radios = document.getElementsByName('addBtnradio');
+                                       console.log(radios);
+                                       for(var i = 0; i < radios.length; i++){
+                                           radios[i].onclick = function(){
+                                             console.log(this.value);
+                                             setTimeout(1000)
+                                           }
+                                       }   
+
+                                       if(combinedQuestion != "" && combinedAnswere != "")
+                                       {
+                                          Swal.fire({
+                                             position: 'top-end',
+                                             icon: 'success',
+                                             title: 'Added Question Approved...',
+                                             showConfirmButton: false,
+                                             timer: 5000
+                                          })
+                                       }
+                                    })
+                                 </script>
                               </div>
                             </div>
                         {% endfor %}
@@ -215,7 +258,7 @@
                                              <label class="btn btn-outline-primary" for="btnradio2">Declined</label>
                                           </div>
                                        </td>
-                                       <td><button type="submit" name="submit">Send</button></td>
+                                       <td><button type="submit" id="approveAnsweredQuestionBtn" name="submit">Send</button></td>
                                     </form>
                                  </tr>
                               {% endfor %}
@@ -223,6 +266,17 @@
                         {% else %}
                            <h3>No Questions for Approval</h3>
                         {% endif %}
+                        <script>
+                           $("#approveAnsweredQuestionBtn").on("click",function () {
+                              Swal.fire({
+                                 position: 'top-end',
+                                 icon: 'success',
+                                 title: 'Answer Approved...',
+                                 showConfirmButton: false,
+                                 timer: 5000
+                              })
+                           })
+                        </script>
                      </div>
                   <!--Approve Answered End-->
 
@@ -265,24 +319,37 @@
                                                    </td>
                                                    <input hidden value="{{updated[i]["newQuestion"][0]}}" name="pattern">
                                                    <input hidden value="{{updated[i]["newResponse"][0]}}" name="responses">
-                                                   <td><button type="submit" name="submit">Send</button></td>
-                                                </form>
-                                                <script>
-                                                   var updatedResponse = '{{updated[i]["oldResponse"]}}'
-
-                                                   let updatedResp= updatedResponse.replace(/&#39;/g, "'").replace(/[\[\]']+/g, "'")
-
-                                                   let updatedResArr = updatedResp.split(",")
-                                                   var combinedRes = updatedResArr.join("\n")
-
-                                                   document.getElementById("updatedQuestionRes").value = combinedRes;
-
-                                                   //console.log("Updated "+updatedRes)
-                                                </script>
+                                                   <td><button type="submit" id="approveUpdatedQuestion" name="submit">Send</button></td>
+                                                </form> 
                                              </tr>
                                           </table>
                                        </div>
                                     </div>
+                                    <script>
+                                       var updatedResponse = '{{updated[i]["oldResponse"]}}'
+
+                                       let updatedResp= updatedResponse.replace(/&#39;/g, "'").replace(/[\[\]']+/g, "'")
+
+                                       let updatedResArr = updatedResp.split(",")
+                                       var combinedRes = updatedResArr.join("\n")
+
+                                       document.getElementById("updatedQuestionRes").value = combinedRes;
+
+                                       //console.log("Updated "+updatedRes)
+                                       $("#approveUpdatedQuestion").on("click",function () {
+                                          if(combinedRes!="")
+                                          {
+                                             Swal.fire({
+                                                position: 'top-end',
+                                                icon: 'success',
+                                                title: 'Updated Question Approved...',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                             })
+                                          }
+                                       })
+                                       
+                                    </script>
                                   </div>
                               {% endfor %}
                            {% else %}
@@ -309,7 +376,7 @@
                      <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
                         <form action="/unanswered" method="post">
                            <div class="mb-3">
-                              <input name="question" value="{{unanswered[i]}}" readonly></input><br><br>
+                              <input name="question" id="question" value="{{unanswered[i]}}" readonly></input><br><br>
                               <label for="addAnswer" class="form-label">Enter Answer Here</label>
                               <input class="form-control" id="addAnswer" type="text" name="addAnswer">
                            </div>
@@ -324,21 +391,8 @@
                               Add New Tag:
                               <input class="form-control" name="addNewAnsTags" id="addNewAnsTags" type="text" placeholder="Enter New Tag Here.">
                            </div>
-                           <script type="text/javascript">
-                              //Shows the Add New Tag if Not Present Option is Selected.
-                              $("#addAnsTags").on('change',function () {
-                                if(this.value == 'nota')
-                                {
-                                  $('#addAnsNewTag').show();
-                                }
-                                else
-                                {
-                                  $('#addAnsNewTag').hide();
-                                }
-                              });
-                           </script>
                            <div class="text-center">
-                              <button class="btn btn-primary btn-lg submit" type="submit" name="submit" value="submit">Submit</button>
+                              <button class="btn btn-primary btn-lg submit" type="submit" id="answereQuestionBtn" name="submit" value="submit">Submit</button>
                            </div>
                         </form>
                      </div>
@@ -348,6 +402,37 @@
                {% else %}
                <h3>No Questions to answer</h3>
                {% endif %}
+               <script type="text/javascript">
+                  //Shows the Add New Tag if Not Present Option is Selected.
+                  $("#addAnsTags").on('change',function () {
+                    if(this.value == 'nota')
+                    {
+                      $('#addAnsNewTag').show();
+                    }
+                    else
+                    {
+                      $('#addAnsNewTag').hide();
+                    }
+                  });
+
+                  $("#answereQuestionBtn").on("click",function () {
+                     var question = document.getElementById("question").value
+                     var answer = document.getElementById("addAnswer").value
+                     var tag = document.getElementById("addAnsTags").value
+                     var newTag = document.getElementById("addAnsNewTag").value
+
+                        if(question != "" && answer!= "" && tag != "" || newTag != "")
+                        {
+                           Swal.fire({
+                              position: 'top-end',
+                              icon: 'success',
+                              title: 'Question Answered...',
+                              showConfirmButton: false,
+                              timer: 5000
+                           })
+                        }
+                  })
+               </script>
             </div>
             <!-- Answer Questions End-->
             {% endif %}
@@ -409,6 +494,21 @@
                     responseChange = true
                   })
                   
+                  $("#updateQuestionBtn").on("click",function () {
+                     var question = document.getElementById("editableQuestion").value
+                     var answer = document.getElementById("responsesTextarea").value
+
+                     if(question != "" && answer != "")
+                     {
+                        Swal.fire({
+                           position: 'top-end',
+                           icon: 'success',
+                           title: 'Question Edited...',
+                           showConfirmButton: false,
+                           timer: 5000
+                        })
+                     }
+                  })
                </script>
             </div>
             <!--Edit Question End-->
