@@ -25,14 +25,14 @@
             "userMailStatus": 0
         },
         {
-            "this is question 3": 0,
-            "response": "",
-            "tag": "",
-            "adminId": "",
-            "adminTimeStamp": "",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": "",
+            "this is question 3": 1,
+            "response": "this is answer 3",
+            "tag": "testing",
+            "adminId": "regadmin@gmail.com",
+            "adminTimeStamp": "22-May-2022 (16:40:25.028566)",
+            "superAdminApproval": 1,
+            "superAdminId": "admin@gmail.com",
+            "superAdminTimeStamp": "22-May-2022 (16:54:02.351073)",
             "userEmail": "shubham@gmail.com",
             "userMailStatus": 0
         },
@@ -74,9 +74,23 @@
             "tag": "testing",
             "adminId": "regadmin@gmail.com",
             "timeStamp": "16-May-2022 (12:09:00.604816)",
-            "superAdminApproval": 0,
+            "superAdminApproval": 1,
             "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "19-May-2022 (21:33:51.296549)"
+            "superAdminTimeStamp": "22-May-2022 (15:30:12.966847)"
+        },
+        {
+            "questions": [
+                "this is question 1"
+            ],
+            "response": [
+                "this is add answer common"
+            ],
+            "tag": "te",
+            "adminId": "regadmin@gmail.com",
+            "timeStamp": "22-May-2022 (14:39:44.151586)",
+            "superAdminApproval": 1,
+            "superAdminId": "admin@gmail.com",
+            "superAdminTimeStamp": "22-May-2022 (15:30:12.966947)"
         }
     ],
     "updated": [

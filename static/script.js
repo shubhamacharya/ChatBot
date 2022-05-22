@@ -273,30 +273,55 @@ var combineResponse
 
 async function getEdit() {
     question = document.getElementById('datalistOptionsInput').value
-    document.getElementById('editableQuestion').value = question
+    document.getElementById('newQuestion').value = question
     var array = new Array()
     for (var res in response) {
         array.push(response[res])
     }
     combineResponse = array.join('\n')
-    document.getElementById('responsesTextarea').value = combineResponse
+    document.getElementById('newResponse').value = combineResponse
 }
 
 async function updateQuestion() {
     let updatedQuestion = ""
     let updatedResponses = ""
+    let question = ""
+    let response = ""
 
     let tag = document.getElementById('searchTag').value
+    let operationBtn = document.getElementsByName('btnradio')
+    let opBtn = ""
 
-    if (questionChange) {
-        updatedQuestion = document.getElementById("editableQuestion").value
+    let adminId = document.getElementsByName("adminId").value
+    for(var i=0,length = operationBtn.length;i<length;i++)
+    {
+        if(operationBtn[i].checked)
+        {
+            opBtn = operationBtn[i].value
+        }
     }
 
-    if (responseChange) {
-        updatedResponses = document.getElementById("responsesTextarea").value
+    if(adminId != "")
+    {
+        updatedQuestion = document.getElementById("newQuestion").value
+        question = document.getElementById("oldQuestion")
+
+        updatedResponses = document.getElementById("newResponse").value
+        combineResponse = document.getElementById("oldResponse").value
+    }
+    else
+    {
+        if (questionChange) {
+            question = document.getElementById("oldQuestion").value
+            updatedQuestion = document.getElementById("newQuestion").value
+        }
+
+        if (responseChange) {
+            updatedResponses = document.getElementById("newResponse").value
+        }
     }
 
-    updatedJSON = { "oldQuestion": question, "pattern": updatedQuestion, "oldResponse": combineResponse, "responses": updatedResponses, "tag": tag }
+    updatedJSON = { "oldQuestion": question, "pattern": updatedQuestion, "oldResponse": combineResponse, "responses": updatedResponses, "tag": tag, "btnradio":opBtn}
 
     const options = {
         method: 'POST',
@@ -305,19 +330,205 @@ async function updateQuestion() {
         },
         body: JSON.stringify(updatedJSON)
     }
-    let response = await fetch("/api/updateQuestion", options)
-    if (response.status != 200) {
-        console.log(response.status)
-    }
-
-    let res = await response.json()
-    if (res.message) {
+    
+    let res = await fetch("/api/updateQuestion", options)
+    if (res.status != 200) {
         Swal.fire({
             position: 'top-right',
-            icon: 'success',
-            title: res.message,
+            icon: 'error',
+            title: response.status,
             showConfirmButton: false,
             timer: 1500
         })
     }
+    else
+    {
+        let resJSON = await res.json()
+        console.log(resJSON)
+        if(resJSON.operation == "Approved")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Question Updated Successfully...",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else if(resJSON.operation == "Declined")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'warning',
+                title: "Question Declined.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Question Added for Approval.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    }
+}
+
+async function addQuestions() {
+    let question = document.getElementById("addQuestions").value
+    let answer = document.getElementById("addQuestionAnswer").value
+    let tag = document.getElementById("tags").value
+
+    if(tag == "nota")
+    {
+        tag = document.getElementById("newTag").value
+    }
+    
+    let operationBtn = document.getElementsByName('addBtnradio').value
+    let opBtn = ""
+
+    for(var i=0,length = operationBtn.length;i<length;i++)
+    {
+        if(operationBtn[i].checked)
+        {
+            opBtn = operationBtn[i].value
+        }
+    }
+    
+    let addQuestion = {"questions":question,"answer":answer,"tag":tag,"btnradio":opBtn}
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(addQuestion)
+    }
+   
+    let response = await fetch("/addQuestion", options)
+    if (response.status != 200) {
+        Swal.fire({
+            position: 'top-right',
+            icon: 'error',
+            title: response.status,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+    else
+    {
+        let resJSON = await response.json()
+        console.log(resJSON)
+        if(resJSON.operation == "Approved")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Question Added Successfully...",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else if(resJSON.operation == "Declined")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'warning',
+                title: "Question Declined.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Question Added for Approval.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    }
+}
+
+async function answerQuestion() {
+    let question = document.getElementById("ansQuestion").value
+    let answer = document.getElementById("ansAnswer").value
+    let tag = document.getElementById("ansAnsTags").value
+
+    if(tag == "nota")
+    {
+        tag = document.getElementById("ansAnsNewTag").value
+    }
+
+    let operationBtn = document.getElementsByName('ansBtnradio')
+    let opBtn = ""
+    for(var i=0,length = operationBtn.length;i<length;i++)
+    {
+        if(operationBtn[i].checked)
+        {
+            opBtn = operationBtn[i].value
+        }
+    }
+    console.log(opBtn)
+
+    let answeredQuestion = {"questions":question,"answer":answer,"tag":tag,"btnradio":opBtn}
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(answeredQuestion)
+    }
+   
+    let response = await fetch("/unanswered", options)
+    if (response.status != 200) {
+        Swal.fire({
+            position: 'top-right',
+            icon: 'error',
+            title: response.status,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+    else
+    {
+        let resJSON = await response.json()
+        console.log(resJSON)
+        if(resJSON.operation == "Approved")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Question Answered Successfully...",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else if(resJSON.operation == "Declined")
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'warning',
+                title: "Answer Declined.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else
+        {
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: "Answer Added for Approval.",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    }
+
 }

@@ -193,17 +193,17 @@ def unansweredWriteJSON(unanswered,email):
 
 def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
     FILE = './test.json'
-
+    #print(tag)
     try:
         file = open(FILE,'r+')
         data = json.load(file)
 
         for intent in data["intents"]:
             if intent["tag"] == tag:
+                #print(intent["patterns"].index(oldPattern))
                 index = intent["patterns"].index(oldPattern)
                 intent["patterns"][index] = "".join(pattern) #[intent["patterns"].index(oldPattern)])#
                 intent["responses"] = response
-
         file.seek(0)
         json.dump(data,file,indent=4)
     except Exception as e:
