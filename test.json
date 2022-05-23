@@ -48,10 +48,12 @@
             "tag": "test",
             "patterns": [
                 "this is question 1.",
-                "this is question 2"
+                "this is question 2",
+                "this is question 1"
             ],
             "responses": [
-                "this is answer 1."
+                "this is answer 1.",
+                "this is answer 1"
             ]
         },
         {
@@ -69,10 +71,14 @@
             "patterns": [
                 "what is your name?",
                 "what are you ?",
-                "how can i help you?"
+                "how can i help you?",
+                "this is add question 1",
+                " this is add question 2",
+                " this is add question 3"
             ],
             "responses": [
                 "yes i will help you",
+                "this is common add answer",
                 "this is common add answer"
             ]
         }

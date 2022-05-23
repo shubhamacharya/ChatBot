@@ -16,18 +16,18 @@
           <div class="card register-card">
                 <div class="card-body">
                     <center><h5 class="card-title">New Admin Register</h5></center>
-                    <form action="/register" method="POST">
+                    <form action="/register" method="POST" autocomplete="off">
                         <div class="mb-3 ">
                           <label for="Email1" class="form-label ">Email address</label>
-                          <input type="email" class="form-control item" name="email" aria-describedby="email" required>
+                          <input type="email" class="form-control item"  name="email" aria-describedby="email" required="required" oninvalid="this.setCustomValidity('Please Enter Email ID')" onvalid="this.setCustomValidity('')">
                         </div>
                         <div class="mb-3 ">
                           <label for="Password" class="form-label">Password</label>
-                          <input type="password" class="form-control item" name="password" required>
+                          <input type="password" class="form-control item" name="password" required="required" oninvalid="this.setCustomValidity('Please Enter Password')" onvalid="this.setCustomValidity('')">
                         </div>
 
-                        <select name="role" class="custom-select" required>
-                          <option selected>Select Role</option>
+                        <select name="role" class="custom-select" required="required" oninvalid="this.setCustomValidity('Please Select Role')" onvalid="this.setCustomValidity('')">
+                          <option value="">Select Role</option>
                           <option  value="superAdmin">Super Admin</option>
                           <option  value="admin">Admin</option>
                         </select>

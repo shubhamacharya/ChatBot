@@ -247,7 +247,14 @@ body {
     background: transparent;
     border: none !important;
     font-size: 18px;
-    margin-bottom: 1px;
+    padding-left: 10px;
+    text-align: center;
+      
+}
+
+.one{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .register-card {
@@ -261,8 +268,11 @@ body {
 
 .card-body {
     font-size: 20px;
-}
+    }
 
+.form-group{
+    padding: 10px;
+}
 .item:hover {
     /*outline: 0px solid transparent;*/
     border: 1px solid #0198fa;
@@ -288,7 +298,20 @@ body {
     margin-bottom: 20px;
 }
 
+.mb-3{
+    padding-top: 20px;
+}
 
+.now{
+    margin-top: 10px;
+    /*border: 3px solid #000;*/
+}
+
+/* Approve Question*/
+.new{
+    padding-left: 30px;
+    margin-top: 50px;
+}
 /* Dropdown menu will open on hoverover */
 
 .dropdown:hover .dropdown-menu {

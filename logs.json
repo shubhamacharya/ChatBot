@@ -1,5 +1,6 @@
 {
-    "unanswered": [{
+    "unanswered": [
+        {
             "this is question 1": 1,
             "response": "this is answer 1",
             "tag": "test",
@@ -7,7 +8,7 @@
             "adminTimeStamp": "09-May-2022 (21:21:56.639523)",
             "superAdminApproval": 1,
             "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "17-May-2022 (21:29:24.511571)",
+            "superAdminTimeStamp": "18-May-2022 (14:52:12.174531)",
             "userEmail": "shubham@gmail.com",
             "userMailStatus": 0
         },
@@ -17,7 +18,7 @@
             "tag": "test",
             "adminId": "regadmin@gmail.com",
             "adminTimeStamp": "09-May-2022 (21:29:36.573496)",
-            "superAdminApproval": 1,
+            "superAdminApproval": 0,
             "superAdminId": "admin@gmail.com",
             "superAdminTimeStamp": "18-May-2022 (10:37:50.639731)",
             "userEmail": "shubham@gmail.com",
@@ -60,23 +61,26 @@
             "userMailStatus": 0
         }
     ],
-    "added": [{
-        "questions": [
-            "this is add question 1",
-            "this is add question 2",
-            "this is add question 3"
-        ],
-        "response": [
-            "this is common add answer"
-        ],
-        "tag": "testing",
-        "adminId": "regadmin@gmail.com",
-        "timeStamp": "16-May-2022 (12:09:00.604816)",
-        "superAdminApproval": 1,
-        "superAdminId": "admin@gmail.com",
-        "superAdminTimeStamp": "18-May-2022 (10:37:12.648754)"
-    }],
-    "updated": [{
+    "added": [
+        {
+            "questions": [
+                "this is add question 1",
+                "this is add question 2",
+                "this is add question 3"
+            ],
+            "response": [
+                "this is common add answer"
+            ],
+            "tag": "testing",
+            "adminId": "regadmin@gmail.com",
+            "timeStamp": "16-May-2022 (12:09:00.604816)",
+            "superAdminApproval": 1,
+            "superAdminId": "admin@gmail.com",
+            "superAdminTimeStamp": "18-May-2022 (14:51:21.854109)"
+        }
+    ],
+    "updated": [
+        {
             "oldQuestion": [
                 "this is question 1"
             ],
