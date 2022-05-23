@@ -75,11 +75,15 @@
                 "this is add question 1",
                 " this is add question 2",
                 " this is add question 3"
+                "this is super admin add",
+                "this is question 3"
             ],
             "responses": [
                 "yes i will help you",
                 "this is common add answer",
                 "this is common add answer"
+                "this super admin add answer",
+                "this is answer 3"
             ]
         }
     ]

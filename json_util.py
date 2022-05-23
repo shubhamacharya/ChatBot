@@ -104,7 +104,7 @@ def getUnanswered(user):
             data = json.load(file)
             if user['role'] == 'superAdmin':
                 for ques in data['unanswered']:
-                    if ques[list(ques)[0]] == 1 and ques['superAdminApproval'] != 1:
+                    if ques[list(ques)[0]] == 1 and ques['superAdminApproval'] not in [1,-1]:
                         unansweredList.append(list(ques)[0])
                         adminInfo.append(ques['adminId'])
                         responses.append(ques['response'])
@@ -133,7 +133,7 @@ def getApproval(user):
 
             if user['role'] == "superAdmin":
                 for ques in data["updated"]:
-                    if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
+                    if ques['superAdminApproval'] not in [1,-1] and ques['adminId'] != "":
                        updated.append(ques)
                 for ques in data["added"]:
                     if ques['superAdminApproval'] != 1 and ques['adminId'] != "":
@@ -193,17 +193,17 @@ def unansweredWriteJSON(unanswered,email):
 
 def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
     FILE = './test.json'
-
+    #print(tag)
     try:
         file = open(FILE,'r+')
         data = json.load(file)
 
         for intent in data["intents"]:
             if intent["tag"] == tag:
+                #print(intent["patterns"].index(oldPattern))
                 index = intent["patterns"].index(oldPattern)
                 intent["patterns"][index] = "".join(pattern) #[intent["patterns"].index(oldPattern)])#
                 intent["responses"] = response
-
         file.seek(0)
         json.dump(data,file,indent=4)
     except Exception as e:

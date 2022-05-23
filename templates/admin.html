@@ -60,7 +60,6 @@
             </div>
             <!--Add Question to chatbot-->
             <div class="tab-pane fade" id="v-pills-add-question" role="tabpanel" aria-labelledby="v-pills-add-question-tab">
-               <form name="addQuestion" action="/addQuestion" method="post">
                   <div class="card">
                      <div class="card-body">
                         <div class="mb-3">
@@ -69,7 +68,7 @@
                         </div>
                         <div class="mb-3">
                            <label for="addQuestionAnswer" class="form-label">Enter Answer Here</label>
-                           <input class="form-control" name="answer" id="addQuestionAnswer" type="text" name="addQuestionAnswer">
+                           <input class="form-control" name="answer" id="addQuestionAnswer" type="text">
                         </div>
                         <select class="form-select" name="tags" id="tags" aria-label="Default select example">
                            <option selected disabled>Select Tag</option>
@@ -82,28 +81,28 @@
                            Add New Tag:
                            <input class="form-control" name="newTag" id="newTag" type="text" placeholder="Enter New Tag Here.">
                         </div>
-                        <script type="text/javascript">
-                           //Shows the Add New Tag if Not Present Option is Selected.
-                           $("#tags").on('change',function () {
-                             if(this.value == 'nota')
-                             {
-                               $('#addNewTag').show();
-                             }
-                             else
-                             {
-                               $('#addNewTag').hide();
-                             }
-                           });
-                        </script>
                         <div class="text-center">
-                           <button class="btn btn-primary btn-lg submit" type="submit" name="submit" value="submit">Submit</button>
+                           <button onclick="addQuestions()" class="btn btn-primary btn-lg submit" type="button" id="addQuestionBtn" name="submit">Submit</button>
                         </div>
                      </div>
                   </div>
-               </form>
+               <script type="text/javascript">
+                  //Shows the Add New Tag if Not Present Option is Selected.
+                  $("#tags").on('change',function () {
+                    if(this.value == 'nota')
+                    {
+                      $('#addNewTag').show();
+                    }
+                    else
+                    {
+                      $('#addNewTag').hide();
+                    }
+                  });
+               </script>
             </div>
             <!--Add Question to chatbot END-->
             {% if user['role'] == 'superAdmin'%}
+
             <!-- Approve Question for Main Admins -->
             <div class="tab-pane fade" id="v-pills-approve" role="tabpanel" aria-labelledby="v-pills-approve-tab">
                <nav>
@@ -139,7 +138,6 @@
                                        <td>Opeation</td>
                                     </thead>
                                     <tr>
-                                       <form action='/addQuestion' method='POST'>
                                           <td> {{i+1}}.</td>
                                           <td> <textarea readonly value="{{added[i]["questions"]}}"  id="approveAddedQuestion" name="questions"></textarea></td>
                                           <td> <input readonly value="{{added[i]["response"]}}" id="approveAddedAnswer" name="answer"></input></td>
@@ -149,6 +147,9 @@
                                              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                                 <input type="radio" class="btn-check " name="addBtnradio" value="Approved" id="addBtnradio1" autocomplete="off">
                                                 <label class="btn btn-outline-primary " for="addBtnradio1">Approve</label>
+                                             <div class="btn-group"  role="group" aria-label="Basic radio toggle button group">
+                                                <input type="radio" class="btn-check" name="addBtnradio" value="Approved" id="addBtnradio1" autocomplete="off">
+                                                <label class="btn btn-outline-primary" for="addBtnradio1">Approve</label>
                                                 <input type="radio" class="btn-check" name="addBtnradio" value="Declined" id="addBtnradio2" autocomplete="off">
                                                 <label class="btn btn-outline-primary" for="addBtnradio2">Declined</label>
                                              </div>
@@ -172,9 +173,29 @@
                                           
                                           document.getElementById("approveAddedAnswer").value   = combinedAnswere;
                                        </script>
+                                          <td><button type="submit" onclick="addQuestions()" id="approveAddedQuestionBtn" name="submit">Send</button></td>
                                     </tr>
                                  </table>
                                 </div>
+                                 <script>
+                                    var test = '{{added[i]["questions"]}}'
+                                    var test2 = '{{added[i]["response"]}}'
+
+                                    console.log(test)
+                                    let ques1 = test.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
+                                    let ans = test2.replace(/&#39;/g, "").replace(/[\[\]']+/g, "")
+
+                                    let quesArr = ques1.split(",")
+                                    let answerArr = ans.split(",")
+
+                                    let combinedQuestion = quesArr.join("\n")
+                                    let combinedAnswere = answerArr.join("\n")
+                                    console.log(combinedQuestion)
+                                    
+                                    document.getElementById("approveAddedQuestion").value = combinedQuestion;
+
+                                    document.getElementById("approveAddedAnswer").value   = combinedAnswere;
+                                 </script>
                               </div>
                             </div>
                         {% endfor %}
@@ -199,22 +220,20 @@
                               </thead>
                               {% for i in range(count) %}
                                  <tr>
-                                    <form action='/unanswered' method='POST'>
-                                       <td> {{i+1}}.</td>
-                                       <td> <input readonly value="{{unanswered[i][0]}}" name="question"></td>
-                                       <td> <input readonly value="{{unanswered[i][1]}}" name="addAnswer"></td>
-                                       <td> <input readonly value="{{unanswered[i][2]}}" name="addAnsTags"></td>
-                                       <td> {{unanswered[i][3]}}</td>
-                                       <td>
-                                          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                             <input type="radio" class="btn-check" name="btnradio" value="Approved" id="btnradio1" autocomplete="off">
-                                             <label class="btn btn-outline-primary" for="btnradio1">Approve</label>
-                                             <input type="radio" class="btn-check" name="btnradio" value="Declined" id="btnradio2" autocomplete="off">
-                                             <label class="btn btn-outline-primary" for="btnradio2">Declined</label>
-                                          </div>
-                                       </td>
-                                       <td><button type="submit" name="submit">Send</button></td>
-                                    </form>
+                                    <td> {{i+1}}.</td>
+                                    <td> <input readonly value="{{unanswered[i][0]}}" name="ansQuestion" id="ansQuestion"></td>
+                                    <td> <input readonly value="{{unanswered[i][1]}}" name="ansAnswer" id="ansAnswer"></td>
+                                    <td> <input readonly value="{{unanswered[i][2]}}" name="ansAnsTags" id="ansAnsTags"></td>
+                                    <td> {{unanswered[i][3]}}</td>
+                                    <td>
+                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                          <input type="radio" class="btn-check" name="ansBtnradio" value="Approved" id="ansBtnradio1" autocomplete="off">
+                                          <label class="btn btn-outline-primary" for="ansBtnradio1">Approve</label>
+                                          <input type="radio" class="btn-check" name="ansBtnradio" value="Declined" id="ansBtnradio2" autocomplete="off">
+                                          <label class="btn btn-outline-primary" for="ansBtnradio2">Declined</label>
+                                       </div>
+                                    </td>
+                                    <td><button type="button" onclick="answerQuestion()" id="approveAnsweredQuestionBtn">Send</button></td>
                                  </tr>
                               {% endfor %}
                            </table>    
@@ -247,40 +266,36 @@
                                                 <td>Opeation</td>
                                              </thead>
                                              <tr>
-                                                <form action='/api/updateQuestion' method='POST'>
-                                                   <td> {{i+1}}.</td>
-                                                   <td> <input readonly value="{{updated[i]["oldQuestion"][0]}}" name="oldQuestion"></td>
-                                                   <td> <textarea readonly value="{{updated[i]["oldResponse"]}}" id="updatedQuestionRes" name="oldResponse"></textarea></td>
-                                                   <td> <input readonly value="{{updated[i]["tag"]}}" name="tag"></td>
-                                                   <td> {{updated[i]["adminId"]}}</td>
-                                                   <td>
-                                                      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                                         <input type="radio" class="btn-check" name="btnradio" value="Approved" id="updateBtnRadio1" autocomplete="off">
-                                                         <label class="btn btn-outline-primary" for="updateBtnRadio1">Approve</label>
-                                                         <input type="radio" class="btn-check" name="btnradio" value="Declined" id="updateBtnRadio2" autocomplete="off">
-                                                         <label class="btn btn-outline-primary" for="updateBtnRadio2">Declined</label>
-                                                      </div>
-                                                   </td>
-                                                   <input hidden value="{{updated[i]["newQuestion"][0]}}" name="pattern">
-                                                   <input hidden value="{{updated[i]["newResponse"][0]}}" name="responses">
-                                                   <td><button type="submit" name="submit">Send</button></td>
-                                                </form>
-                                                <script>
-                                                   var updatedResponse = '{{updated[i]["oldResponse"]}}'
-
-                                                   let updatedResp= updatedResponse.replace(/&#39;/g, "'").replace(/[\[\]']+/g, "'")
-
-                                                   let updatedResArr = updatedResp.split(",")
-                                                   var combinedRes = updatedResArr.join("\n")
-
-                                                   document.getElementById("updatedQuestionRes").value = combinedRes;
-
-                                                   //console.log("Updated "+updatedRes)
-                                                </script>
+                                                <td> {{i+1}}.</td>
+                                                <td> <input readonly value="{{updated[i]["oldQuestion"][0]}}" id="oldQuestion"></td>
+                                                <td> <textarea readonly value="{{updated[i]["newResponse"]}}" id="newResponse"></textarea></td>
+                                                <td> <input readonly value="{{updated[i]["tag"]}}" id="searchTag"></td>
+                                                <td> <input readonly name="adminId" value="{{updated[i]["adminId"]}}"></input></td>
+                                                <td>
+                                                   <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                      <input type="radio" class="btn-check" name="btnradio" value="Approved" id="updateBtnRadio1" autocomplete="off">
+                                                      <label class="btn btn-outline-primary" for="updateBtnRadio1">Approve</label>
+                                                      <input type="radio" class="btn-check" name="btnradio" value="Declined" id="updateBtnRadio2" autocomplete="off">
+                                                      <label class="btn btn-outline-primary" for="updateBtnRadio2">Declined</label>
+                                                   </div>
+                                                </td>
+                                                <input hidden value="{{updated[i]["newQuestion"][0]}}" id="newQuestion">
+                                                <input hidden value="{{updated[i]["oldResponse"][0]}}" id="oldResponse">
+                                                <td><button type="button" onclick="updateQuestion()" id="approveUpdatedQuestion" name="submit">Send</button></td>
                                              </tr>
                                           </table>
                                        </div>
                                     </div>
+                                    <script>
+                                       var updatedResponse = '{{updated[i]["newResponse"]}}'
+
+                                       let updatedResp = updatedResponse.replace(/&#39;/g, "'").replace(/[\[\]']+/g, "'")
+
+                                       let updatedResArr = updatedResp.split(",")
+                                       var combinedRes = updatedResArr.join("\n")
+
+                                       document.getElementById("newResponse").value = combinedRes;
+                                    </script>
                                   </div>
                               {% endfor %}
                            {% else %}
@@ -289,29 +304,30 @@
                         </div>
                      </div>
                   <!--Approve Updated End-->
-                  </div>
-            </div>
+               </div>
             <!-- Approve Question for Main Admins End -->
+
             {% else %}
+
             <!-- Answer Questions -->
             <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                {% if unanswered %}
                <div class="accordion accordion-flush" id="accordionFlushExample">
                   {% for i in range(count) %}
-                  <div class="accordion-item">
-                     <h2 class="accordion-header" id="flush-heading{{i}}">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
-                        {{unanswered[i]}}
-                        </button>
-                     </h2>
-                     <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
-                        <form action="/unanswered" method="post">
+                     <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-heading{{i}}">
+                           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{i}}" aria-expanded="false" aria-controls="flush-collapse{{i}}">
+                           {{unanswered[i]}}
+                           </button>
+                        </h2>
+                        <div id="flush-collapse{{i}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{i}}" data-bs-parent="#accordionFlushExample">
+
                            <div class="mb-3">
-                              <input name="question" value="{{unanswered[i]}}" readonly></input><br><br>
-                              <label for="addAnswer" class="form-label">Enter Answer Here</label>
-                              <input class="form-control" id="addAnswer" type="text" name="addAnswer">
+                              <input name="ansQuestion" id="ansQuestion" value="{{unanswered[i]}}" readonly></input><br><br>
+                              <label for="ansAnswer" class="form-label">Enter Answer Here</label>
+                              <input class="form-control" id="ansAnswer" type="text" name="ansAnswer">
                            </div>
-                           <select class="form-select" name="addAnsTags" id="addAnsTags" aria-label="Default select example">
+                           <select class="form-select" name="ansAnsTags" id="ansAnsTags" aria-label="Default select example">
                               <option selected disabled>Select Tag</option>
                               {% for tag in tags %}
                               <option value= {{ tag }}>{{ tag }}</option>
@@ -320,32 +336,32 @@
                            </select>
                            <div id="addAnsNewTag" style="display: none">
                               Add New Tag:
-                              <input class="form-control" name="addNewAnsTags" id="addNewAnsTags" type="text" placeholder="Enter New Tag Here.">
+                              <input class="form-control" name="ansAnsNewTag" id="ansAnsNewTag" type="text" placeholder="Enter New Tag Here.">
                            </div>
-                           <script type="text/javascript">
-                              //Shows the Add New Tag if Not Present Option is Selected.
-                              $("#addAnsTags").on('change',function () {
-                                if(this.value == 'nota')
-                                {
-                                  $('#addAnsNewTag').show();
-                                }
-                                else
-                                {
-                                  $('#addAnsNewTag').hide();
-                                }
-                              });
-                           </script>
                            <div class="text-center">
-                              <button class="btn btn-primary btn-lg submit" type="submit" name="submit" value="submit">Submit</button>
+                              <button class="btn btn-primary btn-lg submit" type="button" onclick="answerQuestion()" id="answereQuestionBtn" name="submit">Submit</button>
                            </div>
-                        </form>
+
+                        </div>
                      </div>
-                  </div>
                   {% endfor %}
                </div>
                {% else %}
                <h3>No Questions to answer</h3>
                {% endif %}
+               <script type="text/javascript">
+                  //Shows the Add New Tag if Not Present Option is Selected.
+                  $("#addAnsTags").on('change',function () {
+                    if(this.value == 'nota')
+                    {
+                      $('#addAnsNewTag').show();
+                    }
+                    else
+                    {
+                      $('#addAnsNewTag').hide();
+                    }
+                  });
+               </script>
             </div>
             <!-- Answer Questions End-->
             {% endif %}
@@ -356,6 +372,8 @@
                      <div class="card-body">
                <form class="form-inline">
                <select name="searchTag" id="searchTag" class="box mdb-select md-form now">
+                        <form class="form-inline">
+                           <select name="searchTag" id="searchTag" class="box mdb-select md-form">
                <option value="" disabled selected>Select Tag</option>
                {%for tag in tags%}
                <option value="{{tag}}">{{tag}}</option>
@@ -372,6 +390,9 @@
                <input type="text" class="form-control now" id="editableQuestion"></input>
                <textarea class="form-control now" id="responsesTextarea" rows="3"></textarea>
                <button type="button" onclick="updateQuestion()" id="updateQuestionBtn" class="btn btn-primary now">Update</button>
+               <input type="text" class="form-control" id="newQuestion"></input>
+               <textarea class="form-control" id="newResponse" rows="3"></textarea>
+               <button type="button" onclick="updateQuestion()" id="updateQuestionBtn" class="btn btn-primary">Update</button>
                </div>
                </div>
                </form>
@@ -406,7 +427,6 @@
                   $("#responsesTextarea").on("change",() => {
                     responseChange = true
                   })
-                  
                </script>
             </div>
             <!--Edit Question End-->
