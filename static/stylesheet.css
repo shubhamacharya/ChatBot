@@ -8,6 +8,11 @@ body {
     margin: 0 auto;
 }
 
+datalist{
+    z-index: 1000;
+}
+
+
 .chat-bar-collapsible {
     position: fixed;
     bottom: 0;

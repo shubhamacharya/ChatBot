@@ -237,7 +237,7 @@ def update():
 
     req = request.get_json()
 
-    oldPattern = req["oldQuestion"]
+    unformattedOldPattern = req["oldQuestion"]
     unformattedOldAnswer = req["oldResponse"]
     unformattedPatterns = req["pattern"]
     unformattedNewAnswers = req["responses"]
@@ -246,6 +246,7 @@ def update():
     operation = req["btnradio"]
     patterns = formatList(unformattedPatterns)
     response = formatList(unformattedNewAnswers)
+    oldPattern = formatList(unformattedOldPattern) 
     oldResponse = formatList(unformattedOldAnswer)
 
     try:

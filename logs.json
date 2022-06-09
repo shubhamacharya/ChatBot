@@ -77,7 +77,6 @@
             "superAdminApproval": 1,
             "superAdminId": "admin@gmail.com",
             "superAdminTimeStamp": "18-May-2022 (14:51:21.854109)"
-            "superAdminTimeStamp": "22-May-2022 (15:30:12.966847)"
         },
         {
             "questions": [
@@ -115,7 +114,7 @@
             "timeStamp": "12-May-2022 (14:48:00.370180)",
             "superAdminApproval": 1,
             "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "18-May-2022 (12:07:42.494186)"
+            "superAdminTimeStamp": "09-Jun-2022 (14:37:24.406392)"
         },
         {
             "oldQuestion": [
@@ -137,9 +136,31 @@
             "tag": "thanks",
             "adminId": "regadmin@gmail.com",
             "timeStamp": "13-May-2022 (09:01:29.025425)",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": ""
+            "superAdminApproval": 1,
+            "superAdminId": "admin@gmail.com",
+            "superAdminTimeStamp": "09-Jun-2022 (14:36:02.201143)"
+        },
+        {
+            "oldQuestion": [
+                "this is question 1"
+            ],
+            "newQuestion": [
+                "this is question 12"
+            ],
+            "oldResponse": [
+                "this is answer 1.",
+                "this is answer 1"
+            ],
+            "newResponse": [
+                "this is answer 1.",
+                "this is answer 11"
+            ],
+            "tag": "test",
+            "adminId": "regadmin@gmail.com",
+            "timeStamp": "09-Jun-2022 (14:36:51.837621)",
+            "superAdminApproval": 1,
+            "superAdminId": "admin@gmail.com",
+            "superAdminTimeStamp": "09-Jun-2022 (14:37:24.406522)"
         }
     ]
 }

@@ -268,18 +268,63 @@ async function changePasswd() {
     }
 }
 
-question = ""
+var question = ""
 var combineResponse
+var editTag = ""
+var editData = ""
+
+async function getDataList()  {
+    var select = document.getElementById('v-pills-edit').querySelector('#searchTag');
+    let editTag = select.value
+    
+    let url = "/api/tag?tag=" + editTag
+
+    let totalResponse = await fetch(url)
+    editData = await totalResponse.json();
+
+    document.querySelectorAll('#datalistOptions option').forEach(option => option.remove())
+
+    let dataList = document.getElementById('datalistOptions')
+    editData.patterns.forEach((item) => {
+        var option = document.createElement('option')
+        option.value = item
+        dataList.appendChild(option)
+    })
+}
 
 async function getEdit() {
     question = document.getElementById('datalistOptionsInput').value
-    document.getElementById('newQuestion').value = question
-    var array = new Array()
-    for (var res in response) {
-        array.push(response[res])
+    let newQuestion = document.getElementById('v-pills-edit').querySelectorAll('input.newQuestion')
+    for (let i = 0; i < newQuestion.length; i++) {
+        newQuestion[i].value = question;
+    }
+    var array = new Array();
+  
+    for(let res in editData.responses)
+    {
+        array.push(editData.responses[res])
     }
     combineResponse = array.join('\n')
-    document.getElementById('newResponse').value = combineResponse
+
+    let combResp = document.getElementById('v-pills-edit').querySelectorAll('textarea.newResponse')
+    
+    var input = document.createElement("input");
+
+    input.setAttribute("type", "hidden");
+
+    input.setAttribute("name", "oldResponse");
+
+    input.setAttribute("id","oldResponse")
+
+    for(let i=0;i< combResp.length;i++)
+    {
+        combResp[i].value = combineResponse
+
+    }
+        combResp.innerHTML = combineResponse
+        input.setAttribute("value", combineResponse);
+        document.getElementsByClassName('editCardBody')[0].appendChild(input)
+       console.log(document.getElementById('v-pills-edit').querySelectorAll('oldResponse'))
 }
 
 async function updateQuestion() {
@@ -287,8 +332,18 @@ async function updateQuestion() {
     let updatedResponses = ""
     let question = ""
     let response = ""
+    let tag = "" 
 
-    let tag = document.getElementById('searchTag').value
+    let temp = document.getElementById('v-pills-edit').getElementsByClassName('searchTag').value
+    if(temp)
+    {
+        tag = temp
+    }
+    else
+    {
+        tag = document.getElementById('searchTag').value
+    }
+
     let operationBtn = document.getElementsByName('btnradio')
     let opBtn = ""
 
@@ -304,7 +359,7 @@ async function updateQuestion() {
     if(adminId != "")
     {
         updatedQuestion = document.getElementById("newQuestion").value
-        question = document.getElementById("oldQuestion")
+        question = document.getElementById('datalistOptionsInput').value
 
         updatedResponses = document.getElementById("newResponse").value
         combineResponse = document.getElementById("oldResponse").value

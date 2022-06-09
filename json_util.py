@@ -201,7 +201,7 @@ def updateQuestion(pattern,response,oldPattern,oldResponse,tag):
         for intent in data["intents"]:
             if intent["tag"] == tag:
                 #print(intent["patterns"].index(oldPattern))
-                index = intent["patterns"].index(oldPattern)
+                index = intent["patterns"].index(oldPattern[0])
                 intent["patterns"][index] = "".join(pattern) #[intent["patterns"].index(oldPattern)])#
                 intent["responses"] = response
         file.seek(0)
