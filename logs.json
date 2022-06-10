@@ -1,166 +1,54 @@
 {
-    "unanswered": [
-        {
-            "this is question 1": 1,
-            "response": "this is answer 1",
-            "tag": "test",
-            "adminId": "regadmin@gmail.com",
-            "adminTimeStamp": "09-May-2022 (21:21:56.639523)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "18-May-2022 (14:52:12.174531)",
-            "userEmail": "shubham@gmail.com",
-            "userMailStatus": 0
-        },
-        {
-            "this is question 2": 1,
-            "response": "this is answer 2",
-            "tag": "test",
-            "adminId": "regadmin@gmail.com",
-            "adminTimeStamp": "09-May-2022 (21:29:36.573496)",
-            "superAdminApproval": 0,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "18-May-2022 (10:37:50.639731)",
-            "userEmail": "shubham@gmail.com",
-            "userMailStatus": 0
-        },
-        {
-            "this is question 3": 1,
-            "response": "this is answer 3",
-            "tag": "testing",
-            "adminId": "regadmin@gmail.com",
-            "adminTimeStamp": "22-May-2022 (16:40:25.028566)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "22-May-2022 (16:54:02.351073)",
-            "userEmail": "shubham@gmail.com",
-            "userMailStatus": 0
-        },
-        {
-            "this is question 4": 0,
-            "response": "",
-            "tag": "",
-            "adminId": "",
-            "adminTimeStamp": "",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": "",
-            "userEmail": "shubham@gmail.com",
-            "userMailStatus": 0
-        },
-        {
-            "this is my ques": 0,
-            "response": "",
-            "tag": "",
-            "adminId": "",
-            "adminTimeStamp": "",
-            "superAdminApproval": 0,
-            "superAdminId": "",
-            "superAdminTimeStamp": "",
-            "userEmail": "shubham@gmail.com",
-            "userMailStatus": 0
-        }
-    ],
+    "unanswered": [],
     "added": [
         {
             "questions": [
-                "this is add question 1",
-                "this is add question 2",
-                "this is add question 3"
-            ],
-            "response": [
-                "this is common add answer"
-            ],
-            "tag": "testing",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "16-May-2022 (12:09:00.604816)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "18-May-2022 (14:51:21.854109)"
-        },
-        {
-            "questions": [
-                "this is question 1"
+                "this is question 1",
+                "this is question 2"
             ],
             "response": [
                 "this is add answer common"
             ],
-            "tag": "te",
+            "tag": "addTest",
             "adminId": "regadmin@gmail.com",
-            "timeStamp": "22-May-2022 (14:39:44.151586)",
-            "superAdminApproval": 1,
+            "timeStamp": "10-Jun-2022 (11:48:24.090983)",
+            "superAdminApproval": 0,
+            "superAdminId": "",
+            "superAdminTimeStamp": ""
+        },
+        {
+            "questions": [
+                "this is question 1",
+                "this is question 2"
+            ],
+            "response": [
+                "this is answer swal"
+            ],
+            "tag": "test",
             "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "22-May-2022 (15:30:12.966947)"
+            "superAdminTimeStamp": "10-Jun-2022 (14:55:57.349022)"
         }
     ],
     "updated": [
         {
             "oldQuestion": [
-                "this is question 1"
+                "this is add question 1"
             ],
             "newQuestion": [
-                "this is question 1."
+                "this is add question 1."
             ],
             "oldResponse": [
-                "this is answer 1",
-                "this is answer 2"
+                "this is add answer common"
             ],
             "newResponse": [
-                "this is answer 1.",
-                "this is answer 2"
+                "this is add answer common.."
             ],
-            "tag": "test",
+            "tag": "addTest",
             "adminId": "regadmin@gmail.com",
-            "timeStamp": "12-May-2022 (14:48:00.370180)",
+            "timeStamp": "10-Jun-2022 (10:16:38.016732)",
             "superAdminApproval": 1,
             "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "09-Jun-2022 (14:37:24.406392)"
-        },
-        {
-            "oldQuestion": [
-                "Thank's a lot!"
-            ],
-            "newQuestion": [
-                "Thank's a lot"
-            ],
-            "oldResponse": [
-                "Happy to help!",
-                "Any time!",
-                "My pleasure"
-            ],
-            "newResponse": [
-                "Happy to help!",
-                "Any time!",
-                "My pleasure!!"
-            ],
-            "tag": "thanks",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "13-May-2022 (09:01:29.025425)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "09-Jun-2022 (14:36:02.201143)"
-        },
-        {
-            "oldQuestion": [
-                "this is question 1"
-            ],
-            "newQuestion": [
-                "this is question 12"
-            ],
-            "oldResponse": [
-                "this is answer 1.",
-                "this is answer 1"
-            ],
-            "newResponse": [
-                "this is answer 1.",
-                "this is answer 11"
-            ],
-            "tag": "test",
-            "adminId": "regadmin@gmail.com",
-            "timeStamp": "09-Jun-2022 (14:36:51.837621)",
-            "superAdminApproval": 1,
-            "superAdminId": "admin@gmail.com",
-            "superAdminTimeStamp": "09-Jun-2022 (14:37:24.406522)"
+            "superAdminTimeStamp": "10-Jun-2022 (10:17:10.565084)"
         }
     ]
 }

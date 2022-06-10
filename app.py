@@ -130,13 +130,14 @@ def addQuestion_post():
                         i["superAdminApproval"] = -1
                         i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
             else:
-               data["added"].append({
-                    "questions" : pattern,
-                    "response" : responses,
-                    "tag" : tag,
-                    "superAdminId" : user['email'],
-                    "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                }) 
+                if addQuestion(pattern,responses,tag):
+                    data["added"].append({
+                         "questions" : pattern,
+                         "response" : responses,
+                         "tag" : tag,
+                         "superAdminId" : user['email'],
+                         "superAdminTimeStamp" : datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                     }) 
         else:
             data["added"].append({
                 "questions" : pattern,
@@ -153,7 +154,6 @@ def addQuestion_post():
         json.dump(data,file,indent=4)
         
         res = make_response(jsonify({"operation":operation}),200)
-        flash("Question added Successfully...")
         print("Question added Successfully...")     
     except Exception as e:
         print(e)
@@ -194,8 +194,6 @@ def unanswered_post():
                                i["tag"] = tag
                                i["superAdminId"] = user['email']
                                i["superAdminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                else:
-                    flash("Question not added.")
             else:
                 i['superAdminApproval'] = -1
                 i['superAdminId'] = user['email'] 
@@ -208,13 +206,11 @@ def unanswered_post():
                     i["adminId"] = user['email']
                     i[question] = 1
                     i["adminTimeStamp"] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-                    print(i)
         file = open(FILE,"w+")
         file.seek(0)
         json.dump(data,file,indent=4)
 
         res = make_response(jsonify({"operation":operation}),200)
-        flash("Question added Successfully...")
         print("Question added Successfully...")  
     except Exception as e:
         print(f"Error while writing to {FILE}.",e)
@@ -298,14 +294,12 @@ def update():
         json.dump(data,file,indent=4)
 
         res = make_response(jsonify({"operation":operation}),200)
-        flash("Question Updated Successfully...")
         print("Question Updated Successfully...")
     except Exception as e:
         print(e)
     finally:
         file.close()
-        print(res)
-        return res#redirect(url_for('login'),value=res)
+        return res
 
 @app.route("/api/validate",methods=['POST'])
 def validateUser():
@@ -350,7 +344,6 @@ def updatePassword():
 @app.route("/api/fetchUserMail",methods=['POST'])
 def fetchUserMail():
     param = request.get_json()
-    print(param)
 
     formattedQuestion = formatList(param["userQuestions"])
     unansweredWriteJSON(formattedQuestion,param["userEmail"])

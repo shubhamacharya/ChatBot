@@ -266,6 +266,7 @@ async function changePasswd() {
         }
 
     }
+    location.reload();
 }
 
 var question = ""
@@ -431,6 +432,7 @@ async function updateQuestion() {
             })
         }
     }
+    location.reload();
 }
 
 async function addQuestions() {
@@ -443,14 +445,18 @@ async function addQuestions() {
         tag = document.getElementById("newTag").value
     }
     
-    let operationBtn = document.getElementsByName('addBtnradio').value
+    let operationBtn = document.getElementsByName('addBtnradio')
+    console.log(operationBtn)
     let opBtn = ""
-
-    for(var i=0,length = operationBtn.length;i<length;i++)
+    
+    if(operationBtn)
     {
-        if(operationBtn[i].checked)
+        for(var i=0,length = operationBtn.length;i<length;i++)
         {
-            opBtn = operationBtn[i].value
+            if(operationBtn[i].checked)
+            {
+                opBtn = operationBtn[i].value
+            }
         }
     }
     
@@ -476,7 +482,6 @@ async function addQuestions() {
     else
     {
         let resJSON = await response.json()
-        console.log(resJSON)
         if(resJSON.operation == "Approved")
         {
             Swal.fire({
@@ -508,6 +513,7 @@ async function addQuestions() {
             })
         }
     }
+    location.reload();
 }
 
 async function answerQuestion() {
@@ -585,5 +591,5 @@ async function answerQuestion() {
             })
         }
     }
-
+    location.reload();
 }

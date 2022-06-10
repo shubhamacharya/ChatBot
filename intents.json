@@ -124,8 +124,6 @@
         "tag": "fees",
         "patterns": [
             "What is the fee structure?",
-            "Should we submit the entire fees at once or in installments?",
-            "Will I get any confirmation on successful payment of the fee?",
             "information about fee",
             "information on fee",
             "tell me the fee",
@@ -143,9 +141,18 @@
         ],
         "responses": [
             "Fee Structure depends upon your Course",
-            "There are both options available.But for the installments you have to write an application.",
-            "You will get a payment slip after the successful fee payment"
+            "Approximately all courses fees are between 20,000 to 50,000."
         ]
+      },
+      {
+        "tag":"feesInstallment",
+        "patterns":["Should we submit the entire fees at once or in installments?","fees installments","partial fees payment","can i pay fees in installments?"],
+        "responses":["There are both options available.But for the installments you have to write an application."]
+      },
+      {
+        "tag":"feesReceipt",
+        "patterns":[ "Will I get any confirmation on successful payment of the fee?","fees slip","fees receipt"],
+        "responses":["You will get a payment slip after the successful fee payment"]
       },
       {
         "tag": "location",
@@ -173,30 +180,92 @@
         "tag": "hostel",
         "patterns": [
                 "hostel facility",
-                "hostel servive",
-                "hostel location",
-                "hostel address",
+                "hostel service",
                 "hostel facilities",
                 "hostel fees",
                 "Does college provide hostel",
                 "Is there any hostel",
-                "Where is hostel",
                 "do you have hostel",
                 "do you guys have hostel",
-                "hostel",
-                "hostel capacity",
+                "college hostel",
                 "what is the hostel fee",
                 "how to get in hostel",
-                "what is the hostel address",
-                "how far is hostel from college",
-                "hostel college distance",
-                "where is the hostel",
-                "how big is the hostel",
-                "distance between college and hostel",
-                "distance between hostel and college"
+                "dose college provides any hostel facility"     
         ],
         "responses": [
-                "Fergusson College provide's hostel facility"
+                "Fergusson College provide's hostel facility.",
+                "The college has very good hostel accommodation for boys and girls."
+        ]
+    },
+    {
+        "tag":"hostelBuildigs",
+        "patterns":[
+            "how many buildings are there for hostel?",
+            "buildings of hostel",
+            "number hostel blocks",
+            "number of hostel",
+            "Are Girls and Boys hostels are different?"
+        ],
+        "responses":[
+            "There are in all 6-hostel blocks, 4 blocks for gents and 2 blocks for ladies."
+        ]
+    },
+    {
+        "tag":"boysHostelFacility",
+        "patterns":["boys hostel",
+            "boys hostel facilitiy",
+            "number of rooms in boys hostel",
+            "mess in boys hostel",
+            "mess facility for boys hostel"
+        ],
+        "responses":["Rooms = 35,Bathrooms=36,Toilet=30,Mess=02,T.V Rooms=03"]
+    },
+    {
+        "tag":"girlsHostelFacility",
+        "patterns":[
+            "rooms in girls hostel",
+            "number of rooms in girls hostel",
+            "mess in girls hostel",
+            "mess facility for boys hostel"
+        ],
+        "responses":["Rooms= 84, Bathrooms=29,Toilets= 18,Dining hall=01,T.V rooms= 03,CCTVs =05"]
+    },
+    {
+        "tag":"hostelCapacity",
+        "patterns":[
+            "what is hostel capacity",
+            "capacity of hostel?",
+            "how big is the hostel",
+            "intake of hostel",
+            "capacity of hostel",
+            "maximum number of admissions in hostel",
+            "maximum number of student in hostel",
+            "student limit in hostel"
+        ],
+        "responses":[
+            "The total intake capacity of the hostel is 587 students (441 boys and 230 girls)."
+            
+        ]
+    },
+    {
+        "tag":"hostelLocation",
+        "patterns":[ 
+            "hostel location",
+            "hostel address",
+            "Where is hostel",
+            "what is the hostel address",
+            "hostel college distance", 
+            "distance between college and hostel",
+            "distance between hostel and college",
+            "how far is hostel from college",
+            "where is the hostel",
+            "where is girls hostel",
+            "where is boys hostel",
+            "girls hostel location",
+            "boys hostel location"
+        ],
+        "responses":[
+            "The gents hostel blocks are located to the north of the campus and the ladies hostel blocks lie to the east of the campus."
         ]
     },
     {
@@ -342,7 +411,9 @@
             "college infrastructure"
         ],
         "responses": [
-            "Fergusson College has Excellent Infrastructure. Campus is clean. Good IT Labs With Good Speed of Internet connection"
+            "Fergusson College has Excellent Infrastructure. Campus is clean. Good IT Labs With Good Speed of Internet connection. For more information visit <a target=\"_blank\" href=\"https://www.fergusson.edu/article/page/id/34\"> here</a> ",
+            "The college has a sufficient number of classrooms (79) which are very well ventilated with spacious seating arrangements.visit <a target=\"_blank\" href=\"https://www.fergusson.edu/article/page/id/34\"> here",
+            "All science departments have separate buildings and laboratories for general as well as research programmes. There are 52 laboratories for General programmes and 15 laboratories for research.visit <a target=\"_blank\" href=\"https://www.fergusson.edu/article/page/id/34\"> here"
         ]
     },
     {
@@ -360,7 +431,8 @@
             "Cafetaria"
         ],
         "responses": [
-            "Fergusson College has 3 canteen's with variety of food available"
+            "Fergusson College has 3 canteen's with variety of food available",
+            "There are 3 canteens.Each canteen has a sitting arrangement for staff and students."
         ]
     },
     {
@@ -471,18 +543,6 @@
         "patterns": ["what is the cutoff for the admission?"
         ],
         "responses": ["We are not sure as each year the criterias are different. Please refer to the previous cutoffs to get an idea."]
-      },
-      {
-        "tag": "funny",
-        "patterns": [
-            "Tell me a joke!",
-            "Tell me something funny!",
-            "Do you know a joke?"
-        ],
-        "responses": [
-            "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
-            "What did the buffalo say when his son left for college? Bison."
-        ]
       }
    ]
 }
